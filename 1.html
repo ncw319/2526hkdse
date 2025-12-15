@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HKDSE ICT SQL 互動溫習 v2</title>
+  <style>
+    :root{
+      --bg:#0b1220; --panel:#111b2e; --panel2:#0f172a;
+      --text:#e5e7eb; --muted:#9ca3af; --accent:#22c55e; --accent2:#38bdf8;
+      --danger:#f87171; --warn:#fbbf24; --border:#24324d;
+      --code:#0b1020;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 10% 0%, #0e1a33, var(--bg));
+      color:var(--text);
+    }
+    header{
+      padding:16px 16px 10px;
+      border-bottom:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,27,46,.95), rgba(17,27,46,.60));
+      position: sticky; top:0; backdrop-filter: blur(8px);
+      z-index:10;
+    }
+    header h1{ margin:0; font-size:18px; letter-spacing:.3px; }
+    header p{ margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.4; }
+    .wrap{ max-width:1100px; margin:0 auto; padding:14px 16px 22px; }
+    .tabs{
+      display:flex; gap:8px; flex-wrap:wrap;
+      margin:12px 0 10px;
+    }
+    .tab{
+      border:1px solid var(--border); background:rgba(15,23,42,.7);
+      color:var(--text); padding:8px 10px; border-radius:10px;
+      cursor:pointer; font-size:13px;
+    }
+    .tab.active{ border-color:rgba(56,189,248,.7); box-shadow:0 0 0 2px rgba(56,189,248,.15) inset; }
+    .grid{
+      display:grid; gap:12px;
+      grid-template-columns: 1.2fr .8fr;
+    }
+    @media (max-width: 960px){ .grid{ grid-template-columns:1fr; } }
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(17,27,46,.92), rgba(15,23,42,.85));
+      border-radius:14px; padding:12px;
+    }
+    .card h2{ margin:0 0 8px; font-size:15px; }
+    .card h3{ margin:12px 0 8px; font-size:14px; color:#dbeafe; }
+    .muted{ color:var(--muted); font-size:13px; line-height:1.5; }
+    .pill{
+      display:inline-flex; gap:6px; align-items:center;
+      border:1px solid var(--border); padding:5px 8px; border-radius:999px;
+      background:rgba(11,16,32,.55); font-size:12px; color:var(--muted);
+    }
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(11,16,32,.55);
+      color:var(--text);
+      padding:8px 10px; border-radius:10px;
+      cursor:pointer; font-size:13px;
+    }
+    .btn.primary{
+      border-color: rgba(34,197,94,.55);
+      box-shadow: 0 0 0 2px rgba(34,197,94,.12) inset;
+    }
+    .btn.secondary{
+      border-color: rgba(56,189,248,.55);
+      box-shadow: 0 0 0 2px rgba(56,189,248,.12) inset;
+    }
+    .btn.danger{
+      border-color: rgba(248,113,113,.55);
+      box-shadow: 0 0 0 2px rgba(248,113,113,.12) inset;
+    }
+    textarea{
+      width:100%; min-height:150px;
+      background: rgba(11,16,32,.75);
+      border:1px solid var(--border);
+      border-radius:12px; padding:10px;
+      color: #e2e8f0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:13px; line-height:1.5;
+    }
+    code.inline{
+      background: rgba(11,16,32,.75);
+      border:1px solid var(--border);
+      padding:2px 6px; border-radius:8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+    }
+    .tableWrap{ overflow:auto; border-radius:12px; border:1px solid var(--border); }
+    table{ width:100%; border-collapse:collapse; font-size:13px; }
+    th, td{ padding:8px 10px; border-bottom:1px solid rgba(36,50,77,.65); }
+    th{ position:sticky; top:0; background: rgba(17,27,46,.95); text-align:left; color:#c7d2fe; }
+    tr:hover td{ background: rgba(56,189,248,.06); }
+    .notice{
+      border:1px solid rgba(251,191,36,.35);
+      background: rgba(251,191,36,.08);
+      padding:10px; border-radius:12px; color:#fde68a; font-size:13px;
+    }
+    .ok{
+      border:1px solid rgba(34,197,94,.35);
+      background: rgba(34,197,94,.08);
+      padding:10px; border-radius:12px; color:#bbf7d0; font-size:13px;
+    }
+    .err{
+      border:1px solid rgba(248,113,113,.35);
+      background: rgba(248,113,113,.08);
+      padding:10px; border-radius:12px; color:#fecaca; font-size:13px;
+    }
+    .flashGrid{
+      display:grid; gap:10px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+    @media (max-width: 960px){ .flashGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (max-width: 560px){ .flashGrid{ grid-template-columns: 1fr; } }
+
+    .flash{
+      border:1px solid var(--border);
+      border-radius:14px; padding:10px;
+      background: linear-gradient(180deg, rgba(15,23,42,.75), rgba(11,16,32,.70));
+      cursor:pointer;
+      min-height:86px;
+    }
+    .flash .k{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color:#93c5fd; font-size:13px; }
+    .flash .q{ margin-top:6px; font-size:13px; color:var(--text); }
+    .flash .a{ margin-top:8px; font-size:13px; color:var(--muted); display:none; }
+    .flash.reveal .a{ display:block; }
+    .flash.reveal .q{ opacity:.65; }
+    .quizItem{
+      border:1px solid var(--border);
+      border-radius:14px; padding:10px; background: rgba(11,16,32,.55);
+      margin-bottom:10px;
+    }
+    .quizItem .stem{ font-size:13px; margin:0 0 8px; }
+    .choices{ display:grid; gap:6px; }
+    .choice{
+      border:1px solid rgba(36,50,77,.7);
+      background: rgba(15,23,42,.6);
+      border-radius:12px; padding:8px 10px;
+      cursor:pointer; font-size:13px; color:var(--text);
+    }
+    .choice.correct{ border-color:rgba(34,197,94,.7); background: rgba(34,197,94,.10); }
+    .choice.wrong{ border-color:rgba(248,113,113,.7); background: rgba(248,113,113,.10); }
+    .explain{ margin-top:8px; color:var(--muted); font-size:13px; display:none; }
+    .quizItem.done .explain{ display:block; }
+    footer{
+      color:var(--muted); font-size:12px; padding:10px 16px 18px; text-align:center;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>HKDSE ICT Database（SQL）互動溫習</h1>
+    <p>翻卡記重點、即時小測、Playground 執行 SQL。建議 15 分鐘：5 分鐘翻卡 → 5 分鐘小測 → 5 分鐘跑 2-3 個查詢。</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="tabs">
+    <button class="tab active" data-view="flash">重點翻卡</button>
+    <button class="tab" data-view="quiz">即時小測</button>
+    <button class="tab" data-view="playground">SQL Playground</button>
+  </div>
+
+  <!-- FLASH -->
+  <section id="view-flash">
+    <div class="grid">
+      <div class="card">
+        <h2>重點翻卡（點卡片顯示答案）</h2>
+        <p class="muted">目標：看到關鍵字能立即說出用途與常見錯誤（尤其 LIKE、NULL、GROUP BY）。</p>
+
+        <div class="flashGrid" id="flashGrid"></div>
+
+        <div class="row" style="margin-top:10px; justify-content:space-between;">
+          <div class="row">
+            <button class="btn secondary" id="toggleAllFlash" type="button">全部翻開</button>
+            <button class="btn" id="randomFlash" type="button">隨機一張</button>
+          </div>
+          <span class="pill" id="flashProgress">已翻開：0 / 0</span>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <span class="pill">技巧：LIKE 的 <code class="inline">%</code> 代表任意長度；<code class="inline">_</code> 代表 1 個字元</span>
+          <span class="pill">NULL：要用 <code class="inline">IS NULL</code> / <code class="inline">IS NOT NULL</code></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>15分鐘練習路線</h2>
+        <div class="muted">
+          <p style="margin:0 0 8px;">1) 翻卡：運算符（AND/OR/NOT/IN/BETWEEN/LIKE/NULL）</p>
+          <p style="margin:0 0 8px;">2) 翻卡：函數（ABS/INT、LOWER/UPPER/TRIM、COUNT/SUM/AVG/MIN/MAX）</p>
+          <p style="margin:0 0 8px;">3) 做小測：錯題即刻回到翻卡</p>
+          <p style="margin:0;">4) Playground：跑 2 個範例，再自己改條件</p>
+        </div>
+
+        <div style="margin-top:10px" class="notice">
+          若學校電腦禁用外網，可把 sql.js 改為本地檔引用（或改成不執行 SQL、只做選擇題模式）。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="view-quiz" style="display:none;">
+    <div class="grid">
+      <div class="card">
+        <h2>即時小測（按選項即判分）</h2>
+        <div id="quizList"></div>
+        <div class="row">
+          <button class="btn secondary" id="resetQuiz">重置小測</button>
+          <span class="pill" id="quizScore">得分：0 / 0</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>常見失分點</h2>
+        <ul class="muted" style="margin:0; padding-left:18px; line-height:1.6;">
+          <li>把 <code class="inline">= NULL</code> 當作有效比較（應用 <code class="inline">IS NULL</code>）。</li>
+          <li>WHERE 寫成 <code class="inline">AGE BETWEEN 18 AND 25</code> 但漏了 AND 或順序錯。</li>
+          <li>LIKE 忘記加單引號：<code class="inline">LIKE 'A%'</code>。</li>
+          <li>GROUP BY 後 SELECT 欄位：要嘛在 GROUP BY，要嘛用聚合函數。</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLAYGROUND -->
+  <section id="view-playground" style="display:none;">
+    <div class="grid">
+      <div class="card">
+        <h2>SQL Playground（瀏覽器內執行）</h2>
+        <p class="muted">按「Run」後，會在頁面下方顯示結果表。可用範例再自行改條件。</p>
+
+        <div class="row" style="margin-bottom:8px;">
+          <button class="btn secondary" data-example="ex1" data-task="題目：找出所有男性會員（SEX='M'），並按 AGE 由大到小排序；只顯示 MNAME, SEX, AGE, LOCATION。">題目1：男性 + 年齡倒序</button>
+          <button class="btn secondary" data-example="ex2" data-task="題目：找出名字以 A 開頭（LIKE 'A%'）且 SCORE >= 70 的會員；按 SCORE 由高到低排序。">題目2：LIKE + 分數條件</button>
+          <button class="btn secondary" data-example="ex3" data-task="題目：找出 LOCATION 在 HK 或 KLN（IN）且 AGE 介乎 16 到 20（BETWEEN）的會員；按 AGE 由小到大排序。">題目3：IN + BETWEEN</button>
+          <button class="btn secondary" data-example="ex4" data-task="題目：按 LOCATION 分組（GROUP BY），計算每組人數 COUNT(*) 與平均分 AVG(SCORE)；按平均分由高到低排序。">題目4：GROUP BY + AVG</button>
+        </div>
+
+        <div id="taskBox" class="notice" style="margin-bottom:8px;">按上方任一題目以顯示要求。</div>
+
+        <textarea id="sqlInput" spellcheck="false"></textarea>
+
+        <div class="row" style="margin-top:8px;">
+          <button class="btn primary" id="runBtn">Run（執行 SQL）</button>
+          <button class="btn danger" id="resetDbBtn">重設資料庫</button>
+          <span class="pill" id="dbStatus">DB：未載入</span>
+        </div>
+
+        <div id="runMsg" style="margin-top:10px;"></div>
+      </div>
+
+      <div class="card">
+        <h2>資料表：MEMBER</h2>
+        <p class="muted" style="margin:0 0 8px;">欄位：<code class="inline">MNAME</code>, <code class="inline">SEX</code>, <code class="inline">LOCATION</code>, <code class="inline">AGE</code>, <code class="inline">SCORE</code>, <code class="inline">PHONE</code></p>
+        <div class="row" style="margin-bottom:8px;">
+          <button class="btn" id="showAllBtn">顯示全表</button>
+          <span class="pill">提示：先跑 <code class="inline">SELECT * FROM MEMBER;</code></span>
+        </div>
+        <div class="tableWrap" id="tablePreview"></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;">
+      <h2>結果</h2>
+      <div class="tableWrap" id="resultTable"></div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  單一 HTML 檔案；適合 HKDSE ICT SQL 溫習與課堂自學。
+</footer>
+
+<!-- sql.js (SQLite compiled to WebAssembly) -->
+<script src="https://unpkg.com/sql.js@1.10.3/dist/sql-wasm.js"></script>
+
+<script>
+/* =========================
+   DATA + FLASHCARDS + QUIZ
+   ========================= */
+
+// Flashcards content (original, exam-focused)
+const flashcards = [
+  { k: "AND", q: "何時回傳 TRUE？", a: "所有條件都為 TRUE 才為 TRUE；任何一個為 FALSE 就是 FALSE。" },
+  { k: "OR", q: "何時回傳 TRUE？", a: "只要至少一個條件為 TRUE 就為 TRUE；全部 FALSE 才 FALSE。" },
+  { k: "NOT", q: "做什麼？", a: "將條件真假反轉，例如 NOT (AGE > 18) 等同 AGE <= 18。" },
+  { k: "IN", q: "用法？", a: "檢查值是否在集合中：WHERE LOCATION IN ('HK','KLN')." },
+  { k: "BETWEEN ... AND", q: "用法？", a: "範圍（通常包含端點）：WHERE AGE BETWEEN 18 AND 25." },
+  { k: "LIKE", q: "用法？", a: "字串模式比對：WHERE MNAME LIKE 'A%'.  % 任意長度、_ 一個字元。" },
+  { k: "IS NULL", q: "何時用？", a: "NULL 不能用 = 比較；要用 IS NULL 判斷空值。" },
+  { k: "IS NOT NULL", q: "何時用？", a: "找出非空值：WHERE PHONE IS NOT NULL." },
+  { k: "ABS(n)", q: "做什麼？", a: "回傳絕對值，例如 ABS(-7)=7。" },
+  { k: "INT(n)", q: "做什麼？", a: "向下取整（取整數部分），常見於數學處理。" },
+  { k: "LOWER(s)", q: "做什麼？", a: "把字串轉小寫；常用於大小寫不敏感比較前的標準化。" },
+  { k: "UPPER(s)", q: "做什麼？", a: "把字串轉大寫；同上，用於比較或輸出格式。" },
+  { k: "TRIM(s)", q: "做什麼？", a: "移除字串首尾空白；清理輸入資料很常用。" },
+  { k: "MID(s,pos,len)", q: "做什麼？", a: "由指定位置截取指定長度字串；不少系統把 MID 視為 SUBSTRING 的同義用法。" },
+  { k: "COUNT(*)", q: "做什麼？", a: "計算筆數；配合 GROUP BY 可計每組數量。" },
+  { k: "SUM(col)", q: "做什麼？", a: "加總數值欄位；通常搭配 GROUP BY 做分組總和。" },
+  { k: "AVG(col)", q: "做什麼？", a: "計算平均值；分組平均是常考題型。" },
+  { k: "MIN(col) / MAX(col)", q: "做什麼？", a: "找最小/最大值；可用於分組後找每組極值。" },
+  { k: "GROUP BY", q: "做什麼？", a: "把列按欄位分組，再用聚合函數做匯總（如 COUNT/AVG）。" },
+  { k: "ORDER BY", q: "做什麼？", a: "排序結果，可指定 ASC/DESC，例如 ORDER BY AGE DESC。" }
+];
+
+const quiz = [
+  {
+    stem: "想找 MNAME 以 'A' 開頭的會員，WHERE 子句應該怎寫？",
+    choices: [
+      "WHERE MNAME LIKE 'A%'",
+      "WHERE MNAME LIKE A%",
+      "WHERE MNAME = 'A%'",
+      "WHERE MNAME IN 'A%'"
+    ],
+    correct: 0,
+    explain: "LIKE 用於模式比對；字串要加單引號，% 代表任意長度。"
+  },
+  {
+    stem: "要找 AGE 介乎 18 至 25（含端點），應用哪個寫法？",
+    choices: [
+      "WHERE AGE IN (18,25)",
+      "WHERE AGE BETWEEN 18 AND 25",
+      "WHERE AGE > 18 AND < 25",
+      "WHERE AGE BETWEEN 25 AND 18"
+    ],
+    correct: 1,
+    explain: "BETWEEN 18 AND 25 是最常見範圍寫法，考試也偏好這種。"
+  },
+  {
+    stem: "要找 PHONE 欄位為空值（NULL）的記錄，正確是？",
+    choices: [
+      "WHERE PHONE = NULL",
+      "WHERE PHONE == NULL",
+      "WHERE PHONE IS NULL",
+      "WHERE PHONE LIKE NULL"
+    ],
+    correct: 2,
+    explain: "NULL 不用 = 比較，應用 IS NULL / IS NOT NULL。"
+  },
+  {
+    stem: "分組計算每個 LOCATION 的平均分數，應用哪個骨架？",
+    choices: [
+      "SELECT LOCATION, AVG(SCORE) FROM MEMBER GROUP BY LOCATION",
+      "SELECT LOCATION, AVG(SCORE) FROM MEMBER ORDER BY LOCATION",
+      "SELECT LOCATION, SCORE FROM MEMBER GROUP BY LOCATION",
+      "SELECT AVG(LOCATION), SCORE FROM MEMBER GROUP BY SCORE"
+    ],
+    correct: 0,
+    explain: "GROUP BY LOCATION，並在 SELECT 中對 SCORE 使用 AVG。"
+  },
+  {
+    stem: "想按 AGE 由大到小排序，應該？",
+    choices: [
+      "GROUP BY AGE DESC",
+      "ORDER BY AGE DESC",
+      "ORDER BY DESC AGE",
+      "SORT BY AGE DESC"
+    ],
+    correct: 1,
+    explain: "排序用 ORDER BY；DESC 表示由大到小。"
+  }
+];
+
+function renderFlashcards(){
+  const grid = document.getElementById("flashGrid");
+  grid.innerHTML = "";
+  flashcards.forEach((c) => {
+    const el = document.createElement("div");
+    el.className = "flash";
+    el.innerHTML = `<div class="k">${escapeHtml(c.k)}</div>
+                    <div class="q">${escapeHtml(c.q)}</div>
+                    <div class="a">${escapeHtml(c.a)}</div>`;
+    el.addEventListener("click", ()=> { el.classList.toggle("reveal"); updateFlashProgress(); });
+    grid.appendChild(el);
+  });
+}
+
+function renderQuiz(){
+  const list = document.getElementById("quizList");
+  list.innerHTML = "";
+  quiz.forEach((q, idx) => {
+    const item = document.createElement("div");
+    item.className = "quizItem";
+    item.dataset.idx = idx;
+    item.innerHTML = `
+      <p class="stem"><b>Q${idx+1}.</b> ${escapeHtml(q.stem)}</p>
+      <div class="choices"></div>
+      <div class="explain">解釋：${escapeHtml(q.explain)}</div>
+    `;
+    const choicesWrap = item.querySelector(".choices");
+    q.choices.forEach((txt, cidx) => {
+      const ch = document.createElement("button");
+      ch.className = "choice";
+      ch.type = "button";
+      ch.textContent = txt;
+      ch.addEventListener("click", ()=> gradeChoice(item, cidx));
+      choicesWrap.appendChild(ch);
+    });
+    list.appendChild(item);
+  });
+  updateScore();
+}
+
+function gradeChoice(item, chosen){
+  if(item.classList.contains("done")) return;
+  const idx = Number(item.dataset.idx);
+  const q = quiz[idx];
+  const btns = Array.from(item.querySelectorAll(".choice"));
+  btns.forEach((b, i) => {
+    if(i === q.correct) b.classList.add("correct");
+    if(i === chosen && i !== q.correct) b.classList.add("wrong");
+    b.disabled = true;
+  });
+  item.classList.add("done");
+  item.dataset.correct = (chosen === q.correct) ? "1" : "0";
+  updateScore();
+}
+
+function updateScore(){
+  const items = Array.from(document.querySelectorAll(".quizItem"));
+  const done = items.filter(i => i.classList.contains("done"));
+  const score = done.reduce((s,i)=> s + (i.dataset.correct==="1"?1:0), 0);
+  document.getElementById("quizScore").textContent = `得分：${score} / ${quiz.length}`;
+}
+
+function resetQuiz(){
+  renderQuiz();
+}
+
+function escapeHtml(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* =========================
+   TABS
+   ========================= */
+const tabs = document.querySelectorAll(".tab");
+const views = {
+  flash: document.getElementById("view-flash"),
+  quiz: document.getElementById("view-quiz"),
+  playground: document.getElementById("view-playground")
+};
+tabs.forEach(t => t.addEventListener("click", () => {
+  tabs.forEach(x => x.classList.remove("active"));
+  t.classList.add("active");
+  const v = t.dataset.view;
+  Object.keys(views).forEach(k => views[k].style.display = (k===v) ? "" : "none");
+}));
+
+function updateFlashProgress(){
+  const total = document.querySelectorAll(".flash").length;
+  const revealed = document.querySelectorAll(".flash.reveal").length;
+  const el = document.getElementById("flashProgress");
+  if(el) el.textContent = `已翻開：${revealed} / ${total}`;
+
+  const toggle = document.getElementById("toggleAllFlash");
+  if(toggle) toggle.textContent = (revealed === total && total>0) ? "全部收起" : "全部翻開";
+}
+
+function wireFlashControls(){
+  const toggleAll = document.getElementById("toggleAllFlash");
+  if(toggleAll){
+    toggleAll.addEventListener("click", ()=>{
+      const cards = Array.from(document.querySelectorAll(".flash"));
+      const total = cards.length;
+      const revealed = cards.filter(c=>c.classList.contains("reveal")).length;
+      const makeReveal = !(revealed === total && total>0);
+      cards.forEach(c=> c.classList.toggle("reveal", makeReveal));
+      updateFlashProgress();
+    });
+  }
+
+  const randomBtn = document.getElementById("randomFlash");
+  if(randomBtn){
+    randomBtn.addEventListener("click", ()=>{
+      const cards = Array.from(document.querySelectorAll(".flash"));
+      if(cards.length===0) return;
+      const idx = Math.floor(Math.random()*cards.length);
+      cards[idx].classList.add("reveal");
+      cards[idx].scrollIntoView({behavior:"smooth", block:"center"});
+      updateFlashProgress();
+    });
+  }
+}
+
+/* =========================
+   SQL PLAYGROUND (sql.js)
+   ========================= */
+let SQL = null;
+let db = null;
+
+const dbStatus = document.getElementById("dbStatus");
+const runMsg = document.getElementById("runMsg");
+const resultTable = document.getElementById("resultTable");
+const tablePreview = document.getElementById("tablePreview");
+const sqlInput = document.getElementById("sqlInput");
+
+const examples = {
+  ex1: `-- 題目1：找出所有男性會員，按年齡由大到小排序
+SELECT MNAME, SEX, AGE, LOCATION
+FROM MEMBER
+WHERE SEX = 'M'
+ORDER BY AGE DESC;`,
+  ex2: `-- 題目2：名字以 A 開頭，且分數 >= 70；按分數由高到低
+SELECT MNAME, SCORE, LOCATION
+FROM MEMBER
+WHERE MNAME LIKE 'A%' AND SCORE >= 70
+ORDER BY SCORE DESC;`,
+  ex3: `-- 題目3：LOCATION 在 HK/KLN，AGE 介乎 16-20；按年齡由小到大
+SELECT MNAME, AGE, LOCATION
+FROM MEMBER
+WHERE LOCATION IN ('HK','KLN') AND AGE BETWEEN 16 AND 20
+ORDER BY AGE ASC;`,
+  ex4: `-- 題目4：按地區分組，計算每組筆數及平均分；按平均分由高到低
+SELECT LOCATION, COUNT(*) AS CNT, AVG(SCORE) AS AVG_SCORE
+FROM MEMBER
+GROUP BY LOCATION
+ORDER BY AVG_SCORE DESC;`
+};
+
+function setMsg(type, html){
+  runMsg.className = "";
+  runMsg.innerHTML = "";
+  const div = document.createElement("div");
+  div.className = type;
+  div.innerHTML = html;
+  runMsg.appendChild(div);
+}
+
+function renderTable(container, columns, rows){
+  if(!columns || !rows){ container.innerHTML = ""; return; }
+  const thead = `<thead><tr>${columns.map(c=>`<th>${escapeHtml(c)}</th>`).join("")}</tr></thead>`;
+  const tbody = `<tbody>${
+    rows.map(r => `<tr>${r.map(v => `<td>${escapeHtml(v===null?"NULL":v)}</td>`).join("")}</tr>`).join("")
+  }</tbody>`;
+  container.innerHTML = `<table>${thead}${tbody}</table>`;
+}
+
+async function initDb(){
+  resultTable.innerHTML = "";
+  tablePreview.innerHTML = "";
+  setMsg("notice", "正在載入 SQL 引擎（sql.js）...");
+  dbStatus.textContent = "DB：載入中";
+  try{
+    // Locate wasm automatically relative to CDN script path
+    SQL = await initSqlJs({
+      locateFile: (file) => `https://unpkg.com/sql.js@1.10.3/dist/${file}`
+    });
+    db = new SQL.Database();
+    seedDb(db);
+    dbStatus.textContent = "DB：已就緒";
+    setMsg("ok", "已建立 MEMBER 資料表（在瀏覽器記憶體內）。可開始 Run。");
+    showAll();
+  }catch(e){
+    dbStatus.textContent = "DB：載入失敗";
+    setMsg("err", `載入失敗：${escapeHtml(e.message || String(e))}<br>請確認可以連線到 unpkg.com，或改用本地 sql.js。`);
+  }
+}
+
+function seedDb(db){
+  // SAMPLE DATA
+  db.run(`DROP TABLE IF EXISTS MEMBER;`);
+  db.run(`
+    CREATE TABLE MEMBER(
+      MID INTEGER PRIMARY KEY,
+      MNAME TEXT,
+      SEX TEXT,
+      LOCATION TEXT,
+      AGE INTEGER,
+      SCORE INTEGER,
+      PHONE TEXT
+    );
+  `);
+
+  const stmt = db.prepare("INSERT INTO MEMBER (MID, MNAME, SEX, LOCATION, AGE, SCORE, PHONE) VALUES (?,?,?,?,?,?,?);");
+  const rows = [
+    [1, "Alice", "F", "HK", 17, 86, "5123-0001"],
+    [2, "Aaron", "M", "HK", 19, 72, null],
+    [3, "Bella", "F", "KLN", 16, 91, "5123-0003"],
+    [4, "Brian", "M", "NT", 18, 65, "5123-0004"],
+    [5, "Chris", "M", "KLN", 20, 58, null],
+    [6, "Cathy", "F", "NT", 17, 77, "5123-0006"],
+    [7, "Derek", "M", "HK", 16, 80, "5123-0007"],
+    [8, "Daisy", "F", "KLN", 19, 69, null],
+    [9, "Ethan", "M", "NT", 21, 73, "5123-0009"],
+    [10, "Amy", "F", "HK", 20, 88, "5123-0010"]
+  ];
+  db.run("BEGIN TRANSACTION;");
+  for(const r of rows){ stmt.run(r); }
+  db.run("COMMIT;");
+  stmt.free();
+}
+
+function execSql(sql){
+  const res = db.exec(sql);
+  // db.exec returns array of result sets; show first one if any
+  if(!res || res.length === 0){
+    return { columns: [], rows: [], message: "已執行（無輸出表格）。如是 SELECT 以外語句屬正常。" };
+  }
+  const first = res[0];
+  return { columns: first.columns, rows: first.values, message: "已執行並輸出結果。" };
+}
+
+function showAll(){
+  if(!db) return;
+  const out = execSql("SELECT * FROM MEMBER ORDER BY MID;");
+  renderTable(tablePreview, out.columns, out.rows);
+}
+
+function runCurrent(){
+  if(!db){
+    setMsg("err", "資料庫未就緒。請稍候或按「重設資料庫」。");
+    return;
+  }
+  const sql = sqlInput.value.trim();
+  if(!sql){
+    setMsg("notice", "請先輸入 SQL。可按上方任一題目以顯示要求。");
+    return;
+  }
+  try{
+    const out = execSql(sql);
+    renderTable(resultTable, out.columns, out.rows);
+    setMsg("ok", out.message);
+  }catch(e){
+    setMsg("err", `SQL 錯誤：${escapeHtml(e.message || String(e))}`);
+  }
+}
+
+/* Wire buttons */
+document.querySelectorAll("[data-example]").forEach(btn => {
+  btn.addEventListener("click", ()=>{
+    const key = btn.dataset.example;
+    sqlInput.value = examples[key];
+    const task = btn.dataset.task || "";
+    const taskBox = document.getElementById("taskBox");
+    if(taskBox) taskBox.textContent = task || "按上方任一題目以顯示要求。";
+    sqlInput.focus();
+  });
+});
+document.getElementById("runBtn").addEventListener("click", runCurrent);
+document.getElementById("resetDbBtn").addEventListener("click", initDb);
+document.getElementById("showAllBtn").addEventListener("click", showAll);
+document.getElementById("resetQuiz").addEventListener("click", resetQuiz);
+
+/* Initial render */
+renderFlashcards();
+wireFlashControls();
+updateFlashProgress();
+renderQuiz();
+sqlInput.value = examples.ex1;
+// 預設顯示題目1要求
+const taskBox = document.getElementById("taskBox");
+if(taskBox) taskBox.textContent = document.querySelector('[data-example="ex1"]').dataset.task;
+initDb();
+</script>
+</body>
+</html>
