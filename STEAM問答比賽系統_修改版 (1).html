@@ -99,7 +99,7 @@
     <div class="screen active" id="homeScreen">
       <div class="panel" style="text-align:center;">
         <h2 style="margin-bottom:10px; color:#333;">準備開始比賽</h2>
-        <p class="hint">1）先抽取四社作答順序。2）再為每一社（按抽到的順序）選擇題目庫。3）按「開始比賽」進入每社準備頁；如需補救，可按「直接作答」。</p>
+        <p class="hint">1）可抽取四社作答順序（或保持預設順序）。2）為每一社選擇題目庫。3）按「開始比賽」進入每社準備頁；如需補救，可按「直接作答」。</p>
         <div class="row" style="margin-top:12px;">
           <button class="btn btn-primary" onclick="shuffleTeams()">🎲 抽取順序</button>
           <button class="btn btn-danger" onclick="resetScoresOnly()" id="resetBtn" style="display:none;">重置分數</button>
@@ -111,11 +111,10 @@
 
       <div class="panel" id="bankPanel" style="display:none;">
         <h3 style="color:#333;">選擇題目庫（對應抽到的第1至第4組）</h3>
-        <p class="hint" style="margin-top:8px;">提示：同一題目庫可重複選用（如需避免重複，請為四組選不同題目庫）。</p>
+        <p class="hint" style="margin-top:8px;">提示：每個題目庫只能選用一次，四組必須使用不同的題目庫。</p>
         <div class="bank-grid" id="bankSelectors"></div>
         <div class="row" style="margin-top:12px;">
           <button class="btn btn-success" id="startBtn" onclick="startQuiz()">開始比賽（先顯示準備頁）</button>
-          <button class="btn btn-primary" id="directBtn" onclick="startQuizDirect()">直接作答（跳過準備頁）</button>
         </div>
       </div>
 
@@ -373,6 +372,8 @@
       teamOrder = [...teams].sort(() => Math.random() - 0.5);
       displayTeamOrder();
       buildBankSelectors();
+      // 顯示順序和題目庫面板
+      document.getElementById('teamOrder').style.display = 'flex';
       document.getElementById('bankPanel').style.display = 'block';
     }
 
@@ -389,7 +390,7 @@
         return `
           <div class="bank-item">
             <label>第${idx+1}組：${team.name}</label>
-            <select id="bankSel_${idx}">
+            <select id="bankSel_${idx}" onchange="updateBankSelectors()">
               <option value="0">題目庫 #1</option>
               <option value="1">題目庫 #2</option>
               <option value="2">題目庫 #3</option>
@@ -398,11 +399,53 @@
           </div>
         `;
       }).join('');
+      
+      // 為每個組別設定預設值（0,1,2,3）
+      for(let i=0; i<4; i++){
+        const sel = document.getElementById(`bankSel_${i}`);
+        if(sel){
+          sel.value = i.toString();
+          bankForTeamIndex[i] = i;
+        }
+      }
+      
+      updateBankSelectors();
+    }
+
+    function updateBankSelectors(){
+      // 收集已選擇的題目庫
+      const selectedBanks = [];
+      for(let i=0; i<4; i++){
+        const sel = document.getElementById(`bankSel_${i}`);
+        if(sel){
+          selectedBanks[i] = sel.value;
+        }
+      }
+      
+      // 更新每個選擇器，禁用已被其他組選擇的題目庫
+      for(let i=0; i<4; i++){
+        const sel = document.getElementById(`bankSel_${i}`);
+        if(!sel) continue;
+        
+        const currentValue = sel.value;
+        
+        // 遍歷所有選項
+        for(let optIdx=0; optIdx<sel.options.length; optIdx++){
+          const option = sel.options[optIdx];
+          const optValue = option.value;
+          
+          // 如果這個題目庫被其他組選了，就禁用
+          const isSelectedByOthers = selectedBanks.some((val, idx) =>
+            idx !== i && val === optValue
+          );
+          
+          option.disabled = isSelectedByOthers;
+        }
+      }
     }
 
     function startQuiz(){
-      if(teamOrder.length !== 4 && !isSingleMode){
-        alert('請先抽取四社順序。');
+      if(teamOrder.length === 0){
         return;
       }
 
@@ -412,40 +455,22 @@
         bankForTeamIndex[i] = sel ? parseInt(sel.value, 10) : 0;
       }
 
-      // 如未開始過，初始化
+      // 驗證題目庫不可重複
+      const uniqueBanks = new Set(bankForTeamIndex);
+      if(uniqueBanks.size !== 4){
+        alert('錯誤：每個組別必須選擇不同的題目庫！');
+        return;
+      }
+
+      // 如未開始過，初始化（但保留 teamOrder）
       if(!isGameStarted){
-        resetAllState(false);
+        resetAllState(true);
       }
 
       isGameStarted = true;
       currentTeamIndex = 0;
       currentQuestionIndex = 0;
       showReadyPage();
-    }
-
-    function startQuizDirect(){
-      if(teamOrder.length !== 4 && !isSingleMode){
-        alert('請先抽取四社順序。');
-        return;
-      }
-
-      for(let i=0;i<4;i++){
-        const sel = document.getElementById(`bankSel_${i}`);
-        bankForTeamIndex[i] = sel ? parseInt(sel.value, 10) : 0;
-      }
-
-      if(!isGameStarted){
-        resetAllState(false);
-        isGameStarted = true;
-        currentTeamIndex = 0;
-        currentQuestionIndex = 0;
-      }else{
-        isGameStarted = true;
-      }
-
-      showScreen('quiz');
-      displayQuestion();
-      updateScoreboard();
     }
 
     function startSingleDirect(){
@@ -500,7 +525,7 @@
     }
 
     function getCurrentBank(){
-      const effIdx = isSingleMode ? singleTeamIndex : currentTeamIndex;
+      const effIdx = isSingleMode ? singleTeamIndex : teamOrder.findIndex(t => t.name === teams[currentTeamIndex].name); // 修正為對應索引
       const bankIndex = bankForTeamIndex[effIdx] ?? 0;
       return questionBanks[bankIndex];
     }
@@ -780,6 +805,9 @@
 
     // 初始化
     showScreen('home');
+    teamOrder = []; // 初始為空，等待抽取順序
+    document.getElementById('teamOrder').style.display = 'none'; // 初始隱藏
+    document.getElementById('bankPanel').style.display = 'none'; // 初始隱藏
   </script>
 </body>
 </html>
