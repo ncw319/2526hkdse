@@ -525,7 +525,7 @@
     }
 
     function getCurrentBank(){
-      const effIdx = isSingleMode ? singleTeamIndex : teamOrder.findIndex(t => t.name === teams[currentTeamIndex].name); // 修正為對應索引
+      const effIdx = isSingleMode ? singleTeamIndex : currentTeamIndex; // 多社模式：直接用當前組別索引
       const bankIndex = bankForTeamIndex[effIdx] ?? 0;
       return questionBanks[bankIndex];
     }
