@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HKDSE ICT SQL 互動溫習 v2</title>
+  <title>HKDSE ICT SQL 互動溫習 v2 (離線版)</title>
   <style>
     :root{
       --bg:#0b1220; --panel:#111b2e; --panel2:#0f172a;
@@ -199,7 +199,7 @@
         </div>
 
         <div style="margin-top:10px" class="notice">
-          若學校電腦禁用外網，可把 sql.js 改為本地檔引用（或改成不執行 SQL、只做選擇題模式）。
+          請確保已經將 sql-asm.min.js 放置在與本網頁同一資料夾內，以確保離線執行 SQL 順利。
         </div>
       </div>
     </div>
@@ -275,18 +275,17 @@
 </div>
 
 <footer>
-  單一 HTML 檔案；適合 HKDSE ICT SQL 溫習與課堂自學。
+  單機離線版本；適合放入 USB 帶至無網路環境溫習使用。
 </footer>
 
-<!-- sql.js (SQLite compiled to WebAssembly) -->
-<script src="https://unpkg.com/sql.js@1.10.3/dist/sql-wasm.js"></script>
+<!-- 載入本機的 sql.js (純 js 版本，無須 wasm 檔) -->
+<script src="sql-asm.min.js"></script>
 
 <script>
 /* =========================
    DATA + FLASHCARDS + QUIZ
    ========================= */
 
-// Flashcards content (original, exam-focused)
 const flashcards = [
   { k: "AND", q: "何時回傳 TRUE？", a: "所有條件都為 TRUE 才為 TRUE；任何一個為 FALSE 就是 FALSE。" },
   { k: "OR", q: "何時回傳 TRUE？", a: "只要至少一個條件為 TRUE 就為 TRUE；全部 FALSE 才 FALSE。" },
@@ -496,7 +495,7 @@ function wireFlashControls(){
 }
 
 /* =========================
-   SQL PLAYGROUND (sql.js)
+   SQL PLAYGROUND (本地純 JS asm 版)
    ========================= */
 let SQL = null;
 let db = null;
@@ -551,13 +550,11 @@ function renderTable(container, columns, rows){
 async function initDb(){
   resultTable.innerHTML = "";
   tablePreview.innerHTML = "";
-  setMsg("notice", "正在載入 SQL 引擎（sql.js）...");
+  setMsg("notice", "正在載入本地 SQL 引擎...");
   dbStatus.textContent = "DB：載入中";
   try{
-    // Locate wasm automatically relative to CDN script path
-    SQL = await initSqlJs({
-      locateFile: (file) => `https://unpkg.com/sql.js@1.10.3/dist/${file}`
-    });
+    // 呼叫純 JS 版本的初始化，不需設定 locateFile 以及 wasm 檔案
+    SQL = await initSqlJs();
     db = new SQL.Database();
     seedDb(db);
     dbStatus.textContent = "DB：已就緒";
@@ -565,7 +562,7 @@ async function initDb(){
     showAll();
   }catch(e){
     dbStatus.textContent = "DB：載入失敗";
-    setMsg("err", `載入失敗：${escapeHtml(e.message || String(e))}<br>請確認可以連線到 unpkg.com，或改用本地 sql.js。`);
+    setMsg("err", `載入失敗：${escapeHtml(e.message || String(e))}<br><br><b>🚨 解決方式：</b><br>請確認你已經下載了 <code>sql-asm.min.js</code>，並把它跟這份 HTML 放在「同一個資料夾裡面」。`);
   }
 }
 
@@ -605,7 +602,6 @@ function seedDb(db){
 
 function execSql(sql){
   const res = db.exec(sql);
-  // db.exec returns array of result sets; show first one if any
   if(!res || res.length === 0){
     return { columns: [], rows: [], message: "已執行（無輸出表格）。如是 SELECT 以外語句屬正常。" };
   }
@@ -621,7 +617,7 @@ function showAll(){
 
 function runCurrent(){
   if(!db){
-    setMsg("err", "資料庫未就緒。請稍候或按「重設資料庫」。");
+    setMsg("err", "資料庫未就緒。請確認已經將 sql-asm.min.js 下載放於同資料夾中。");
     return;
   }
   const sql = sqlInput.value.trim();
@@ -660,7 +656,6 @@ wireFlashControls();
 updateFlashProgress();
 renderQuiz();
 sqlInput.value = examples.ex1;
-// 預設顯示題目1要求
 const taskBox = document.getElementById("taskBox");
 if(taskBox) taskBox.textContent = document.querySelector('[data-example="ex1"]').dataset.task;
 initDb();
