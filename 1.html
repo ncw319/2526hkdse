@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HKDSE ICT SQL 互動溫習 v2 (離線版)</title>
+  <title>HKDSE ICT SQL 互動溫習 v4（離線版）</title>
   <style>
     :root{
       --bg:#0b1220; --panel:#111b2e; --panel2:#0f172a;
@@ -26,21 +26,15 @@
     }
     header h1{ margin:0; font-size:18px; letter-spacing:.3px; }
     header p{ margin:6px 0 0; color:var(--muted); font-size:13px; line-height:1.4; }
-    .wrap{ max-width:1100px; margin:0 auto; padding:14px 16px 22px; }
-    .tabs{
-      display:flex; gap:8px; flex-wrap:wrap;
-      margin:12px 0 10px;
-    }
+    .wrap{ max-width:1200px; margin:0 auto; padding:14px 16px 22px; }
+    .tabs{ display:flex; gap:8px; flex-wrap:wrap; margin:12px 0 10px; }
     .tab{
       border:1px solid var(--border); background:rgba(15,23,42,.7);
       color:var(--text); padding:8px 10px; border-radius:10px;
       cursor:pointer; font-size:13px;
     }
     .tab.active{ border-color:rgba(56,189,248,.7); box-shadow:0 0 0 2px rgba(56,189,248,.15) inset; }
-    .grid{
-      display:grid; gap:12px;
-      grid-template-columns: 1.2fr .8fr;
-    }
+    .grid{ display:grid; gap:12px; grid-template-columns: 1.2fr .8fr; }
     @media (max-width: 960px){ .grid{ grid-template-columns:1fr; } }
     .card{
       border:1px solid var(--border);
@@ -57,72 +51,49 @@
     }
     .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
     .btn{
-      border:1px solid var(--border);
-      background: rgba(11,16,32,.55);
-      color:var(--text);
-      padding:8px 10px; border-radius:10px;
+      border:1px solid var(--border); background: rgba(11,16,32,.55);
+      color:var(--text); padding:8px 10px; border-radius:10px;
       cursor:pointer; font-size:13px;
     }
-    .btn.primary{
-      border-color: rgba(34,197,94,.55);
-      box-shadow: 0 0 0 2px rgba(34,197,94,.12) inset;
-    }
-    .btn.secondary{
-      border-color: rgba(56,189,248,.55);
-      box-shadow: 0 0 0 2px rgba(56,189,248,.12) inset;
-    }
-    .btn.danger{
-      border-color: rgba(248,113,113,.55);
-      box-shadow: 0 0 0 2px rgba(248,113,113,.12) inset;
-    }
+    .btn.primary{ border-color: rgba(34,197,94,.55); box-shadow: 0 0 0 2px rgba(34,197,94,.12) inset; }
+    .btn.secondary{ border-color: rgba(56,189,248,.55); box-shadow: 0 0 0 2px rgba(56,189,248,.12) inset; }
+    .btn.danger{ border-color: rgba(248,113,113,.55); box-shadow: 0 0 0 2px rgba(248,113,113,.12) inset; }
     textarea{
-      width:100%; min-height:150px;
-      background: rgba(11,16,32,.75);
-      border:1px solid var(--border);
-      border-radius:12px; padding:10px;
+      width:100%; min-height:150px; background: rgba(11,16,32,.75);
+      border:1px solid var(--border); border-radius:12px; padding:10px;
       color: #e2e8f0; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size:13px; line-height:1.5;
     }
     code.inline{
-      background: rgba(11,16,32,.75);
-      border:1px solid var(--border);
+      background: rgba(11,16,32,.75); border:1px solid var(--border);
       padding:2px 6px; border-radius:8px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size:12px;
     }
     .tableWrap{ overflow:auto; border-radius:12px; border:1px solid var(--border); }
     table{ width:100%; border-collapse:collapse; font-size:13px; }
-    th, td{ padding:8px 10px; border-bottom:1px solid rgba(36,50,77,.65); }
+    th, td{ padding:8px 10px; border-bottom:1px solid rgba(36,50,77,.65); white-space:nowrap; }
     th{ position:sticky; top:0; background: rgba(17,27,46,.95); text-align:left; color:#c7d2fe; }
     tr:hover td{ background: rgba(56,189,248,.06); }
     .notice{
-      border:1px solid rgba(251,191,36,.35);
-      background: rgba(251,191,36,.08);
+      border:1px solid rgba(251,191,36,.35); background: rgba(251,191,36,.08);
       padding:10px; border-radius:12px; color:#fde68a; font-size:13px;
     }
     .ok{
-      border:1px solid rgba(34,197,94,.35);
-      background: rgba(34,197,94,.08);
+      border:1px solid rgba(34,197,94,.35); background: rgba(34,197,94,.08);
       padding:10px; border-radius:12px; color:#bbf7d0; font-size:13px;
     }
     .err{
-      border:1px solid rgba(248,113,113,.35);
-      background: rgba(248,113,113,.08);
+      border:1px solid rgba(248,113,113,.35); background: rgba(248,113,113,.08);
       padding:10px; border-radius:12px; color:#fecaca; font-size:13px;
     }
-    .flashGrid{
-      display:grid; gap:10px;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-    }
+    .flashGrid{ display:grid; gap:10px; grid-template-columns: repeat(3, minmax(0,1fr)); }
     @media (max-width: 960px){ .flashGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
     @media (max-width: 560px){ .flashGrid{ grid-template-columns: 1fr; } }
-
     .flash{
-      border:1px solid var(--border);
-      border-radius:14px; padding:10px;
+      border:1px solid var(--border); border-radius:14px; padding:10px;
       background: linear-gradient(180deg, rgba(15,23,42,.75), rgba(11,16,32,.70));
-      cursor:pointer;
-      min-height:86px;
+      cursor:pointer; min-height:86px;
     }
     .flash .k{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; color:#93c5fd; font-size:13px; }
     .flash .q{ margin-top:6px; font-size:13px; color:var(--text); }
@@ -130,38 +101,66 @@
     .flash.reveal .a{ display:block; }
     .flash.reveal .q{ opacity:.65; }
     .quizItem{
-      border:1px solid var(--border);
-      border-radius:14px; padding:10px; background: rgba(11,16,32,.55);
-      margin-bottom:10px;
+      border:1px solid var(--border); border-radius:14px; padding:10px;
+      background: rgba(11,16,32,.55); margin-bottom:10px;
     }
     .quizItem .stem{ font-size:13px; margin:0 0 8px; }
     .choices{ display:grid; gap:6px; }
     .choice{
-      border:1px solid rgba(36,50,77,.7);
-      background: rgba(15,23,42,.6);
-      border-radius:12px; padding:8px 10px;
-      cursor:pointer; font-size:13px; color:var(--text);
+      border:1px solid rgba(36,50,77,.7); background: rgba(15,23,42,.6);
+      border-radius:12px; padding:8px 10px; cursor:pointer; font-size:13px; color:var(--text);
     }
     .choice.correct{ border-color:rgba(34,197,94,.7); background: rgba(34,197,94,.10); }
     .choice.wrong{ border-color:rgba(248,113,113,.7); background: rgba(248,113,113,.10); }
     .explain{ margin-top:8px; color:var(--muted); font-size:13px; display:none; }
     .quizItem.done .explain{ display:block; }
-    footer{
-      color:var(--muted); font-size:12px; padding:10px 16px 18px; text-align:center;
+
+    /* Reference table styles */
+    .refTable{ width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+    .refTable th, .refTable td{ padding:6px 8px; border:1px solid rgba(36,50,77,.65); }
+    .refTable th{ background: rgba(17,27,46,.95); color:#c7d2fe; text-align:left; position:sticky; top:0; }
+    .refTable td{ vertical-align:top; }
+    .refTable code{ background: rgba(11,16,32,.75); padding:1px 4px; border-radius:4px; font-size:11px; font-family: ui-monospace, monospace; }
+
+    /* Playground statement list */
+    .stmtList{
+      max-height: 520px; overflow-y: auto;
+      border:1px solid var(--border); border-radius:12px;
+      padding:8px; background: rgba(11,16,32,.55);
     }
+    .stmtList::-webkit-scrollbar{ width:6px; }
+    .stmtList::-webkit-scrollbar-thumb{ background: var(--border); border-radius:3px; }
+    .stmtCat{
+      font-size:11px; color:var(--accent2); text-transform:uppercase;
+      letter-spacing:.5px; margin:10px 0 4px; padding-left:4px;
+    }
+    .stmtCat:first-child{ margin-top:2px; }
+    .stmtBtn{
+      display:block; width:100%; text-align:left;
+      border:1px solid transparent; background: transparent;
+      color:var(--text); padding:7px 10px; border-radius:8px;
+      cursor:pointer; font-size:12px; line-height:1.4;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      margin-bottom:2px;
+    }
+    .stmtBtn:hover{ background: rgba(56,189,248,.08); border-color: rgba(56,189,248,.2); }
+    .stmtBtn.active{ background: rgba(56,189,248,.12); border-color: rgba(56,189,248,.4); }
+
+    footer{ color:var(--muted); font-size:12px; padding:10px 16px 18px; text-align:center; }
   </style>
 </head>
 <body>
 <header>
   <div class="wrap">
-    <h1>HKDSE ICT Database（SQL）互動溫習</h1>
-    <p>翻卡記重點、即時小測、Playground 執行 SQL。建議 15 分鐘：5 分鐘翻卡 → 5 分鐘小測 → 5 分鐘跑 2-3 個查詢。</p>
+    <h1>HKDSE ICT Database（SQL）互動溫習 — 離線版</h1>
+    <p>翻卡記重點、SQL 參考表、即時小測、Playground 示範所有語句。建議 15 分鐘：5 分鐘翻卡 → 5 分鐘小測 → 5 分鐘跑示範。</p>
   </div>
 </header>
 
 <div class="wrap">
   <div class="tabs">
     <button class="tab active" data-view="flash">重點翻卡</button>
+    <button class="tab" data-view="reference">SQL 參考表</button>
     <button class="tab" data-view="quiz">即時小測</button>
     <button class="tab" data-view="playground">SQL Playground</button>
   </div>
@@ -172,9 +171,7 @@
       <div class="card">
         <h2>重點翻卡（點卡片顯示答案）</h2>
         <p class="muted">目標：看到關鍵字能立即說出用途與常見錯誤（尤其 LIKE、NULL、GROUP BY）。</p>
-
         <div class="flashGrid" id="flashGrid"></div>
-
         <div class="row" style="margin-top:10px; justify-content:space-between;">
           <div class="row">
             <button class="btn secondary" id="toggleAllFlash" type="button">全部翻開</button>
@@ -182,25 +179,74 @@
           </div>
           <span class="pill" id="flashProgress">已翻開：0 / 0</span>
         </div>
-
         <div class="row" style="margin-top:10px;">
           <span class="pill">技巧：LIKE 的 <code class="inline">%</code> 代表任意長度；<code class="inline">_</code> 代表 1 個字元</span>
           <span class="pill">NULL：要用 <code class="inline">IS NULL</code> / <code class="inline">IS NOT NULL</code></span>
         </div>
       </div>
-
       <div class="card">
         <h2>15分鐘練習路線</h2>
         <div class="muted">
           <p style="margin:0 0 8px;">1) 翻卡：運算符（AND/OR/NOT/IN/BETWEEN/LIKE/NULL）</p>
           <p style="margin:0 0 8px;">2) 翻卡：函數（ABS/INT、LOWER/UPPER/TRIM、COUNT/SUM/AVG/MIN/MAX）</p>
-          <p style="margin:0 0 8px;">3) 做小測：錯題即刻回到翻卡</p>
-          <p style="margin:0;">4) Playground：跑 2 個範例，再自己改條件</p>
+          <p style="margin:0 0 8px;">3) 翻卡：基本 SQL 語句 &amp; SQL 約束（新增）</p>
+          <p style="margin:0 0 8px;">4) 做小測：錯題即刻回到翻卡</p>
+          <p style="margin:0;">5) Playground：逐個語句點開示範，再自己改條件</p>
         </div>
+        <div style="margin-top:10px" class="notice">本版本為純離線版 — 所有功能在瀏覽器內完成，無需外網連線。</div>
+      </div>
+    </div>
+  </section>
 
-        <div style="margin-top:10px" class="notice">
-          請確保已經將 sql-asm.min.js 放置在與本網頁同一資料夾內，以確保離線執行 SQL 順利。
-        </div>
+  <!-- REFERENCE TABLES -->
+  <section id="view-reference" style="display:none;">
+    <div class="card">
+      <h2>基本 SQL 語句</h2>
+      <div class="tableWrap">
+        <table class="refTable">
+          <thead><tr><th style="width:18%">指令</th><th style="width:42%">SQL 語句</th><th style="width:40%">描述</th></tr></thead>
+          <tbody>
+            <tr><td>選擇</td><td><code>SELECT * FROM table</code></td><td>列出所有記錄</td></tr>
+            <tr><td>選擇</td><td><code>SHOW TABLES</code></td><td>列出所有數據表</td></tr>
+            <tr><td>選擇</td><td><code>SHOW CREATE TABLE table</code></td><td>顯示建立該數據表的 SQL 語句</td></tr>
+            <tr><td>選擇</td><td><code>USE database</code></td><td>使用數據庫</td></tr>
+            <tr><td>創建</td><td><code>CREATE DATABASE database</code></td><td>創建數據庫</td></tr>
+            <tr><td>創建</td><td><code>CREATE TABLE table (field data_type [constraints], ...)</code></td><td>創建數據表</td></tr>
+            <tr><td>創建</td><td><code>CREATE TABLE table (field data_type PRIMARY KEY, ...)</code></td><td>創建數據表（主鍵）</td></tr>
+            <tr><td>刪除</td><td><code>DROP TABLE table</code></td><td>刪除數據表</td></tr>
+            <tr><td>刪除</td><td><code>DROP DATABASE database</code></td><td>刪除數據庫</td></tr>
+            <tr><td>選擇</td><td><code>SELECT field [,field] FROM table [WHERE criteria] [ORDER BY field [,field] [ASC|DESC]]</code></td><td>從數據表中選擇記錄</td></tr>
+            <tr><td>插入</td><td><code>INSERT INTO table [(field1, field2)] VALUES (value1, value2)</code></td><td>將記錄插入數據表</td></tr>
+            <tr><td>更新</td><td><code>UPDATE table SET field = value [WHERE criteria]</code></td><td>更新數據表中的數據</td></tr>
+            <tr><td>刪除</td><td><code>DELETE FROM table [WHERE criteria]</code></td><td>從數據表刪除數據</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table RENAME new_table</code></td><td>重新命名數據表</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table RENAME COLUMN old_field TO new_field</code></td><td>重新命名數據表中的欄位</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table ADD field data_type</code></td><td>在數據表中加入新欄位</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table DROP field</code></td><td>在數據表中刪除欄位</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table MODIFY field data_type</code></td><td>在數據表中修改欄位類型</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table ADD PRIMARY KEY (field)</code></td><td>在數據表中添加主鍵</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table DROP PRIMARY KEY</code></td><td>在數據表中刪除主鍵</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table ADD constraint_name UNIQUE (field)</code></td><td>在數據表中添加唯一約束</td></tr>
+            <tr><td>修改</td><td><code>ALTER TABLE table DROP constraint_name</code></td><td>在數據表中刪除約束</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-top:12px;">
+      <h2>SQL 約束（Constraints）</h2>
+      <div class="tableWrap">
+        <table class="refTable">
+          <thead><tr><th style="width:12%">約束</th><th style="width:12%">關鍵字</th><th style="width:76%">SQL 語句</th></tr></thead>
+          <tbody>
+            <tr><td>創建</td><td>PRIMARY KEY</td><td><code>CREATE TABLE table (field data_type PRIMARY KEY)</code><br><code>ALTER TABLE table ADD PRIMARY KEY (field)</code></td></tr>
+            <tr><td>創建</td><td>FOREIGN KEY</td><td><code>CREATE TABLE table (field data_type REFERENCES parent_table (reference_field))</code><br><code>ALTER TABLE table ADD FOREIGN KEY (field) REFERENCES parent_table (reference_field)</code></td></tr>
+            <tr><td>創建</td><td>FOREIGN KEY</td><td><code>ALTER TABLE table DROP FOREIGN KEY foreign_key_name</code></td></tr>
+            <tr><td>插入</td><td>NOT NULL</td><td><code>CREATE TABLE table (field data_type NOT NULL)</code><br><code>ALTER TABLE table MODIFY field data_type NOT NULL</code></td></tr>
+            <tr><td>插入</td><td>UNIQUE</td><td><code>CREATE TABLE table (field data_type UNIQUE)</code><br><code>ALTER TABLE table ADD UNIQUE(field)</code><br><code>ALTER TABLE table DROP INDEX field</code></td></tr>
+            <tr><td>插入</td><td>DEFAULT</td><td><code>CREATE TABLE table (field data_type DEFAULT value)</code><br><code>ALTER TABLE table ALTER field SET DEFAULT value</code></td></tr>
+            <tr><td>插入</td><td>CHECK</td><td><code>CREATE TABLE table (CHECK (criteria))</code><br><code>ALTER TABLE table ADD CHECK (criteria)</code><br><code>ALTER TABLE table DROP CONSTRAINT constraint_name</code></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -216,7 +262,6 @@
           <span class="pill" id="quizScore">得分：0 / 0</span>
         </div>
       </div>
-
       <div class="card">
         <h2>常見失分點</h2>
         <ul class="muted" style="margin:0; padding-left:18px; line-height:1.6;">
@@ -232,173 +277,836 @@
   <!-- PLAYGROUND -->
   <section id="view-playground" style="display:none;">
     <div class="grid">
+      <div class="card" style="padding:10px;">
+        <h2>SQL 語句示範</h2>
+        <p class="muted" style="margin:0 0 8px;">點擊任一語句載入範例，按 Run 執行。</p>
+        <div class="stmtList" id="stmtList"></div>
+      </div>
       <div class="card">
-        <h2>SQL Playground（瀏覽器內執行）</h2>
-        <p class="muted">按「Run」後，會在頁面下方顯示結果表。可用範例再自行改條件。</p>
-
-        <div class="row" style="margin-bottom:8px;">
-          <button class="btn secondary" data-example="ex1" data-task="題目：找出所有男性會員（SEX='M'），並按 AGE 由大到小排序；只顯示 MNAME, SEX, AGE, LOCATION。">題目1：男性 + 年齡倒序</button>
-          <button class="btn secondary" data-example="ex2" data-task="題目：找出名字以 A 開頭（LIKE 'A%'）且 SCORE >= 70 的會員；按 SCORE 由高到低排序。">題目2：LIKE + 分數條件</button>
-          <button class="btn secondary" data-example="ex3" data-task="題目：找出 LOCATION 在 HK 或 KLN（IN）且 AGE 介乎 16 到 20（BETWEEN）的會員；按 AGE 由小到大排序。">題目3：IN + BETWEEN</button>
-          <button class="btn secondary" data-example="ex4" data-task="題目：按 LOCATION 分組（GROUP BY），計算每組人數 COUNT(*) 與平均分 AVG(SCORE)；按平均分由高到低排序。">題目4：GROUP BY + AVG</button>
-        </div>
-
-        <div id="taskBox" class="notice" style="margin-bottom:8px;">按上方任一題目以顯示要求。</div>
-
+        <h2>SQL Playground（純離線 JS 引擎）</h2>
+        <p class="muted" style="margin:0 0 8px;">支援：SELECT / INSERT / UPDATE / DELETE / CREATE TABLE / DROP TABLE / ALTER TABLE / SHOW TABLES / USE / CREATE DATABASE</p>
+        <div id="stmtDesc" class="notice" style="margin-bottom:8px;">點擊左側任一語句以載入示範。</div>
         <textarea id="sqlInput" spellcheck="false"></textarea>
-
         <div class="row" style="margin-top:8px;">
           <button class="btn primary" id="runBtn">Run（執行 SQL）</button>
           <button class="btn danger" id="resetDbBtn">重設資料庫</button>
-          <span class="pill" id="dbStatus">DB：未載入</span>
+          <span class="pill" id="dbStatus">DB：已就緒（離線）</span>
         </div>
-
         <div id="runMsg" style="margin-top:10px;"></div>
       </div>
-
-      <div class="card">
-        <h2>資料表：MEMBER</h2>
-        <p class="muted" style="margin:0 0 8px;">欄位：<code class="inline">MNAME</code>, <code class="inline">SEX</code>, <code class="inline">LOCATION</code>, <code class="inline">AGE</code>, <code class="inline">SCORE</code>, <code class="inline">PHONE</code></p>
-        <div class="row" style="margin-bottom:8px;">
-          <button class="btn" id="showAllBtn">顯示全表</button>
-          <span class="pill">提示：先跑 <code class="inline">SELECT * FROM MEMBER;</code></span>
-        </div>
-        <div class="tableWrap" id="tablePreview"></div>
-      </div>
     </div>
-
     <div class="card" style="margin-top:12px;">
       <h2>結果</h2>
       <div class="tableWrap" id="resultTable"></div>
     </div>
+    <div class="card" style="margin-top:12px;">
+      <h2>資料表預覽</h2>
+      <div class="row" style="margin-bottom:8px;">
+        <button class="btn" id="showAllBtn">顯示 MEMBER 全表</button>
+        <button class="btn" id="showOrdersBtn">顯示 ORDERS 全表</button>
+        <span class="pill">提示：可先跑 <code class="inline">SHOW TABLES;</code> 查看所有表</span>
+      </div>
+      <div class="tableWrap" id="tablePreview"></div>
+    </div>
   </section>
 </div>
 
-<footer>
-  單機離線版本；適合放入 USB 帶至無網路環境溫習使用。
-</footer>
-
-<!-- 載入本機的 sql.js (純 js 版本，無須 wasm 檔) -->
-<script src="sql-asm.min.js"></script>
+<footer>單一 HTML 檔案；適合 HKDSE ICT SQL 溫習與課堂自學。完全離線運作。</footer>
 
 <script>
-/* =========================
-   DATA + FLASHCARDS + QUIZ
-   ========================= */
+/* ============================================================
+   LIGHTWEIGHT OFFLINE SQL ENGINE (pure JS, no external deps)
+   Supports: SELECT/INSERT/UPDATE/DELETE/CREATE TABLE/DROP TABLE
+   /ALTER TABLE/SHOW TABLES/USE/CREATE DATABASE
+   + WHERE, ORDER BY, GROUP BY, HAVING, aggregate functions,
+   LIKE, IN, BETWEEN, IS NULL, AND/OR/NOT
+   ============================================================ */
 
+const DB = { tables: {}, databases: ['ICT_SQL'] };
+
+function dbReset() { DB.tables = {}; }
+
+function dbCreateTable(name, columns) {
+  DB.tables[name.toUpperCase()] = { columns: {...columns}, rows: [], constraints: [] };
+}
+
+function dbInsert(table, row) {
+  const t = DB.tables[table.toUpperCase()];
+  if (!t) throw new Error(`Table ${table} not found`);
+  t.rows.push({ ...row });
+}
+
+function dbUpdate(table, whereFn, updates) {
+  const t = DB.tables[table.toUpperCase()];
+  if (!t) throw new Error(`Table ${table} not found`);
+  let count = 0;
+  for (const r of t.rows) { if (whereFn(r)) { Object.assign(r, updates); count++; } }
+  return count;
+}
+
+function dbDelete(table, whereFn) {
+  const t = DB.tables[table.toUpperCase()];
+  if (!t) throw new Error(`Table ${table} not found`);
+  const before = t.rows.length;
+  t.rows = t.rows.filter(r => !whereFn(r));
+  return before - t.rows.length;
+}
+
+function dbSelect(table, options = {}) {
+  const t = DB.tables[table.toUpperCase()];
+  if (!t) throw new Error(`Table ${table} not found`);
+  let rows = [...t.rows];
+  if (options.where) rows = rows.filter(options.where);
+  if (options.groupBy) {
+    const groups = {};
+    for (const r of rows) {
+      const key = r[options.groupBy];
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(r);
+    }
+    const result = [];
+    for (const [key, groupRows] of Object.entries(groups)) {
+      const agg = {};
+      if (options.aggregates) {
+        for (const [alias, fn] of Object.entries(options.aggregates)) {
+          const vals = groupRows.map(r => r[fn.col]);
+          if (fn.fn === 'COUNT') agg[alias] = vals.length;
+          else if (fn.fn === 'SUM') agg[alias] = vals.reduce((a, b) => (a||0) + (b||0), 0);
+          else if (fn.fn === 'AVG') agg[alias] = vals.reduce((a, b) => (a||0) + (b||0), 0) / vals.length;
+          else if (fn.fn === 'MIN') agg[alias] = Math.min(...vals.filter(v => v != null));
+          else if (fn.fn === 'MAX') agg[alias] = Math.max(...vals.filter(v => v != null));
+        }
+      }
+      result.push({ [options.groupBy]: key, ...agg });
+    }
+    rows = result;
+    if (options.having) rows = rows.filter(options.having);
+  }
+  if (options.orderBy) {
+    const dir = options.orderDir === 'DESC' ? -1 : 1;
+    rows.sort((a, b) => {
+      const av = a[options.orderBy], bv = b[options.orderBy];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return av > bv ? dir : av < bv ? -dir : 0;
+    });
+  }
+  if (options.columns && options.columns[0] !== '*') {
+    rows = rows.map(r => { const nr = {}; for (const c of options.columns) nr[c] = r[c]; return nr; });
+  }
+  return rows;
+}
+
+/* ---- Tokenizer ---- */
+function tokenize(sql) {
+  const tokens = [];
+  let i = 0;
+  while (i < sql.length) {
+    if (/\s/.test(sql[i])) { i++; continue; }
+    if (sql[i] === '-' && sql[i+1] === '-') { while (i < sql.length && sql[i] !== '\n') i++; continue; }
+    if (sql[i] === "'" || sql[i] === '"') {
+      const q = sql[i]; let s = ''; i++;
+      while (i < sql.length && sql[i] !== q) { s += sql[i]; i++; }
+      if (i < sql.length) i++;
+      tokens.push({ type: 'string', value: s });
+      continue;
+    }
+    if (/[0-9]/.test(sql[i]) || (sql[i] === '.' && /[0-9]/.test(sql[i+1]))) {
+      let n = '';
+      while (i < sql.length && /[0-9.]/.test(sql[i])) { n += sql[i]; i++; }
+      tokens.push({ type: 'number', value: n.includes('.') ? parseFloat(n) : parseInt(n, 10) });
+      continue;
+    }
+    if (i + 1 < sql.length) {
+      const two = sql[i] + sql[i+1];
+      if (['>=','<=','<>','!='].includes(two)) {
+        tokens.push({ type: 'op', value: two === '!=' ? '<>' : two });
+        i += 2; continue;
+      }
+    }
+    if ('=<>+-*/(),.*'.includes(sql[i])) {
+      tokens.push({ type: 'op', value: sql[i] });
+      i++; continue;
+    }
+    if (/[A-Za-z_]/.test(sql[i])) {
+      let w = '';
+      while (i < sql.length && /[A-Za-z0-9_]/.test(sql[i])) { w += sql[i]; i++; }
+      const upper = w.toUpperCase();
+      const keywords = ['SELECT','FROM','WHERE','INSERT','INTO','VALUES','UPDATE','SET','DELETE',
+        'ORDER','BY','GROUP','HAVING','ASC','DESC','LIMIT','AND','OR','NOT','IN','BETWEEN',
+        'LIKE','IS','NULL','AS','COUNT','SUM','AVG','MIN','MAX','DISTINCT','CREATE','TABLE',
+        'DROP','ALTER','ADD','MODIFY','RENAME','COLUMN','DATABASE','SHOW','USE','PRIMARY',
+        'KEY','FOREIGN','REFERENCES','UNIQUE','CHECK','DEFAULT','CONSTRAINT','INDEX','TO',
+        'OF','ON','CASCADE','RESTRICT','IF','EXISTS','TEMPORARY','VIEW','GRANT',
+        'REVOKE','ALL','PRIVILEGES','PUBLIC','ROLE','SCHEMA','TRIGGER','PROCEDURE',
+        'FUNCTION','RETURNS','BEGIN','END','DECLARE','CURSOR','FETCH','OPEN','CLOSE',
+        'COMMIT','ROLLBACK','TRANSACTION','WORK','SAVEPOINT','RELEASE','LOCK','UNLOCK',
+        'JOIN','INNER','LEFT','RIGHT','OUTER','CROSS','NATURAL','USING','CASE',
+        'WHEN','THEN','ELSE','CAST','COALESCE','NULLIF','GREATEST','LEAST',
+        'TRUE','FALSE','BOOLEAN','INTEGER','INT','SMALLINT','BIGINT','DECIMAL','NUMERIC',
+        'REAL','DOUBLE','PRECISION','FLOAT','CHAR','VARCHAR','TEXT','DATE','TIME',
+        'TIMESTAMP','INTERVAL','ARRAY','ROW','RECORD','ANY','SOME','EVERY'];
+      if (keywords.includes(upper)) tokens.push({ type: 'kw', value: upper });
+      else tokens.push({ type: 'id', value: w });
+      continue;
+    }
+    i++;
+  }
+  return tokens;
+}
+
+/* ---- Parser & Executor ---- */
+function parseAndExecute(sql) {
+  const tokens = tokenize(sql);
+  if (tokens.length === 0) return { columns: [], rows: [], message: 'Empty SQL.' };
+  const firstKw = tokens[0].type === 'kw' ? tokens[0].value : null;
+
+  if (firstKw === 'SELECT') return executeSelect(tokens);
+  if (firstKw === 'INSERT') return executeInsert(tokens);
+  if (firstKw === 'UPDATE') return executeUpdate(tokens);
+  if (firstKw === 'DELETE') return executeDelete(tokens);
+
+  if (firstKw === 'SHOW') {
+    if (tokens[1] && tokens[1].value === 'TABLES') {
+      const names = Object.keys(DB.tables);
+      return { columns: ['table_name'], rows: names.map(n => ({ table_name: n })), message: `Found ${names.length} table(s).` };
+    }
+    if (tokens[1] && tokens[1].value === 'CREATE' && tokens[2] && tokens[2].value === 'TABLE') {
+      const name = tokens[3] ? tokens[3].value.toUpperCase() : '';
+      const t = DB.tables[name];
+      if (!t) throw new Error(`Table ${name} not found`);
+      const cols = Object.keys(t.columns).map(c => `${c} TEXT`).join(', ');
+      const sql = `CREATE TABLE ${name} (${cols});`;
+      return { columns: ['Table', 'Create Table'], rows: [{ 'Table': name, 'Create Table': sql }], message: `SHOW CREATE TABLE ${name}.` };
+    }
+  }
+  if (firstKw === 'USE') {
+    const name = tokens[1] ? tokens[1].value : '';
+    return { columns: [], rows: [], message: `Switched to database "${name}" (simulated).` };
+  }
+  if (firstKw === 'CREATE') {
+    if (tokens[1] && tokens[1].value === 'DATABASE') {
+      const name = tokens[2] ? tokens[2].value : '';
+      if (!DB.databases.includes(name.toUpperCase())) DB.databases.push(name.toUpperCase());
+      return { columns: [], rows: [], message: `Database "${name}" created (simulated).` };
+    }
+    if (tokens[1] && tokens[1].value === 'TABLE') return executeCreateTable(tokens);
+  }
+  if (firstKw === 'DROP') {
+    if (tokens[1] && tokens[1].value === 'TABLE') {
+      const name = tokens.find(t => t.type === 'id')?.value?.toUpperCase();
+      if (name && DB.tables[name]) { delete DB.tables[name]; return { columns: [], rows: [], message: `Table ${name} dropped.` }; }
+      return { columns: [], rows: [], message: 'Table not found or already dropped.' };
+    }
+    if (tokens[1] && tokens[1].value === 'DATABASE') {
+      const name = tokens[2] ? tokens[2].value.toUpperCase() : '';
+      DB.databases = DB.databases.filter(d => d !== name);
+      return { columns: [], rows: [], message: `Database "${name}" dropped (simulated).` };
+    }
+  }
+  if (firstKw === 'ALTER') return executeAlterTable(tokens);
+
+  throw new Error(`Unsupported SQL: ${tokens.map(t=>t.value||t.type).join(' ')}`);
+}
+
+function executeSelect(tokens) {
+  let pos = 1;
+  const columns = [];
+  const aggregates = {};
+
+  while (pos < tokens.length && !(tokens[pos].type === 'kw' && tokens[pos].value === 'FROM')) {
+    if (tokens[pos].type === 'op' && tokens[pos].value === ',') { pos++; continue; }
+    if (tokens[pos].type === 'op' && tokens[pos].value === '*') { columns.push('*'); pos++; continue; }
+    if (tokens[pos].type === 'kw' && ['COUNT','SUM','AVG','MIN','MAX'].includes(tokens[pos].value)) {
+      const fnName = tokens[pos].value; pos++;
+      if (tokens[pos] && tokens[pos].value === '(') {
+        pos++;
+        let arg;
+        if (tokens[pos] && tokens[pos].value === '*') { arg = '*'; pos++; }
+        else if (tokens[pos] && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { arg = tokens[pos].value; pos++; }
+        if (tokens[pos] && tokens[pos].value === ')') pos++;
+        let alias = `${fnName}(${arg})`;
+        if (tokens[pos] && tokens[pos].value === 'AS') { pos++; if (tokens[pos] && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { alias = tokens[pos].value; pos++; } }
+        columns.push(alias);
+        aggregates[alias] = { fn: fnName, col: arg === '*' ? '*' : arg };
+        continue;
+      }
+    }
+    if (tokens[pos] && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) {
+      let colName = tokens[pos].value; pos++;
+      if (tokens[pos] && tokens[pos].value === '.') { pos++; if (tokens[pos] && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { colName = tokens[pos].value; pos++; } }
+      if (tokens[pos] && tokens[pos].value === 'AS') { pos++; if (tokens[pos] && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { colName = tokens[pos].value; pos++; } }
+      columns.push(colName);
+      continue;
+    }
+    pos++;
+  }
+
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'FROM') pos++;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table specified in SELECT');
+  pos++;
+
+  let whereFn = null, groupBy = null, havingFn = null, orderBy = null, orderDir = 'ASC';
+  while (pos < tokens.length) {
+    const kw = tokens[pos].type === 'kw' ? tokens[pos].value : null;
+    if (kw === 'WHERE') { pos++; const r = parseWhereClause(tokens, pos); whereFn = r.fn; pos = r.pos; }
+    else if (kw === 'GROUP') {
+      pos++;
+      if (pos < tokens.length && tokens[pos].value === 'BY') pos++;
+      if (pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { groupBy = tokens[pos].value; pos++; }
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'HAVING') {
+        pos++; const r = parseHavingClause(tokens, pos); havingFn = r.fn; pos = r.pos;
+      }
+    }
+    else if (kw === 'ORDER') {
+      pos++;
+      if (pos < tokens.length && tokens[pos].value === 'BY') pos++;
+      if (pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { orderBy = tokens[pos].value; pos++; }
+      if (pos < tokens.length && tokens[pos].type === 'kw' && (tokens[pos].value === 'ASC' || tokens[pos].value === 'DESC')) { orderDir = tokens[pos].value; pos++; }
+    }
+    else if (kw === 'LIMIT') { pos++; if (pos < tokens.length && tokens[pos].type === 'number') pos++; }
+    else pos++;
+  }
+
+  const rows = dbSelect(tableName, { columns, where: whereFn, groupBy, aggregates, having: havingFn, orderBy, orderDir });
+  let outColumns = columns;
+  if (columns[0] === '*' && !groupBy) {
+    const t = DB.tables[tableName.toUpperCase()];
+    outColumns = t ? Object.keys(t.columns) : [];
+  }
+  return { columns: outColumns, rows, message: `Selected ${rows.length} row(s) from ${tableName}.` };
+}
+
+function parseWhereClause(tokens, start) {
+  const conditions = [];
+  const logicOps = [];
+  let pos = start;
+
+  function parseCondition() {
+    if (pos >= tokens.length) return;
+    let leftCol = '';
+    if (tokens[pos].type === 'id' || tokens[pos].type === 'kw') {
+      leftCol = tokens[pos].value; pos++;
+      if (pos < tokens.length && tokens[pos].value === '.') { pos++; if (pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { leftCol = tokens[pos].value; pos++; } }
+    }
+    if (!leftCol) return;
+    let op = '';
+    if (pos < tokens.length && tokens[pos].type === 'op') { op = tokens[pos].value; pos++; }
+    if (!op) return;
+
+    if (op === 'IS') {
+      let isNot = false;
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'NOT') { isNot = true; pos++; }
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'NULL') { pos++; conditions.push({ col: leftCol, op: isNot ? 'IS NOT NULL' : 'IS NULL' }); return; }
+    }
+    if (op === 'NOT') {
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'IN') { op = 'NOT IN'; pos++; }
+      else if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'BETWEEN') { op = 'NOT BETWEEN'; pos++; }
+      else if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'LIKE') { op = 'NOT LIKE'; pos++; }
+    }
+    if (op === 'IN' || op === 'NOT IN') {
+      if (pos < tokens.length && tokens[pos].value === '(') {
+        pos++; const values = [];
+        while (pos < tokens.length && tokens[pos].value !== ')') { if (tokens[pos].type === 'string' || tokens[pos].type === 'number') values.push(tokens[pos].value); pos++; }
+        if (pos < tokens.length && tokens[pos].value === ')') pos++;
+        conditions.push({ col: leftCol, op, values }); return;
+      }
+    }
+    if (op === 'BETWEEN' || op === 'NOT BETWEEN') {
+      let low, high;
+      if (pos < tokens.length && (tokens[pos].type === 'string' || tokens[pos].type === 'number')) { low = tokens[pos].value; pos++; }
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'AND') pos++;
+      if (pos < tokens.length && (tokens[pos].type === 'string' || tokens[pos].type === 'number')) { high = tokens[pos].value; pos++; }
+      conditions.push({ col: leftCol, op, low, high }); return;
+    }
+    if (op === 'LIKE' || op === 'NOT LIKE') {
+      if (pos < tokens.length && tokens[pos].type === 'string') { const pattern = tokens[pos].value; pos++; conditions.push({ col: leftCol, op, pattern }); return; }
+    }
+    if (['=', '<>', '>', '<', '>=', '<='].includes(op)) {
+      let rightVal;
+      if (pos < tokens.length && (tokens[pos].type === 'string' || tokens[pos].type === 'number')) { rightVal = tokens[pos].value; pos++; }
+      else if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'NULL') { rightVal = null; pos++; }
+      conditions.push({ col: leftCol, op, val: rightVal }); return;
+    }
+  }
+
+  parseCondition();
+  while (pos < tokens.length && tokens[pos].type === 'kw' && (tokens[pos].value === 'AND' || tokens[pos].value === 'OR')) {
+    logicOps.push(tokens[pos].value); pos++; parseCondition();
+  }
+
+  function evalCondition(row, cond) {
+    const val = row[cond.col];
+    switch (cond.op) {
+      case '=': return val == cond.val;
+      case '<>': return val != cond.val;
+      case '>': return val > cond.val;
+      case '<': return val < cond.val;
+      case '>=': return val >= cond.val;
+      case '<=': return val <= cond.val;
+      case 'IS NULL': return val == null;
+      case 'IS NOT NULL': return val != null;
+      case 'IN': return cond.values.includes(val);
+      case 'NOT IN': return !cond.values.includes(val);
+      case 'BETWEEN': return val >= cond.low && val <= cond.high;
+      case 'NOT BETWEEN': return !(val >= cond.low && val <= cond.high);
+      case 'LIKE': { const re = new RegExp('^' + cond.pattern.replace(/%/g,'.*').replace(/_/g,'.') + '$','i'); return re.test(String(val)); }
+      case 'NOT LIKE': { const re = new RegExp('^' + cond.pattern.replace(/%/g,'.*').replace(/_/g,'.') + '$','i'); return !re.test(String(val)); }
+      default: return true;
+    }
+  }
+  function whereFn(row) {
+    if (conditions.length === 0) return true;
+    let result = evalCondition(row, conditions[0]);
+    for (let i = 0; i < logicOps.length; i++) {
+      const next = evalCondition(row, conditions[i+1]);
+      result = logicOps[i] === 'AND' ? result && next : result || next;
+    }
+    return result;
+  }
+  return { fn: whereFn, pos };
+}
+
+function parseHavingClause(tokens, start) {
+  let pos = start;
+  let aggName = '', op = '', threshold = 0;
+  if (pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw')) { aggName = tokens[pos].value; pos++; }
+  if (pos < tokens.length && tokens[pos].type === 'op') { op = tokens[pos].value; pos++; }
+  if (pos < tokens.length && tokens[pos].type === 'number') { threshold = tokens[pos].value; pos++; }
+  function havingFn(row) {
+    const val = row[aggName];
+    if (val == null) return false;
+    switch (op) {
+      case '>': return val > threshold; case '<': return val < threshold;
+      case '>=': return val >= threshold; case '<=': return val <= threshold;
+      case '=': return val == threshold; case '<>': return val != threshold;
+      default: return true;
+    }
+  }
+  return { fn: havingFn, pos };
+}
+
+function executeInsert(tokens) {
+  let pos = 1;
+  if (pos < tokens.length && tokens[pos].value === 'INTO') pos++;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table in INSERT');
+  pos++;
+  const columns = [];
+  if (pos < tokens.length && tokens[pos].value === '(') {
+    pos++;
+    while (pos < tokens.length && tokens[pos].value !== ')') { if (tokens[pos].type === 'id' || tokens[pos].type === 'kw') columns.push(tokens[pos].value); pos++; }
+    if (pos < tokens.length && tokens[pos].value === ')') pos++;
+  }
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'VALUES') pos++;
+  const values = [];
+  if (pos < tokens.length && tokens[pos].value === '(') {
+    pos++;
+    while (pos < tokens.length && tokens[pos].value !== ')') {
+      if (tokens[pos].type === 'string' || tokens[pos].type === 'number') values.push(tokens[pos].value);
+      else if (tokens[pos].type === 'kw' && tokens[pos].value === 'NULL') values.push(null);
+      pos++;
+    }
+    if (pos < tokens.length && tokens[pos].value === ')') pos++;
+  }
+  const row = {};
+  if (columns.length > 0) { for (let i = 0; i < columns.length; i++) row[columns[i]] = values[i]; }
+  else { const t = DB.tables[tableName.toUpperCase()]; const cn = t ? Object.keys(t.columns) : []; for (let i = 0; i < cn.length; i++) row[cn[i]] = values[i]; }
+  dbInsert(tableName, row);
+  return { columns: [], rows: [], message: `Inserted 1 row into ${tableName}.` };
+}
+
+function executeUpdate(tokens) {
+  let pos = 1;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table in UPDATE');
+  pos++;
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'SET') pos++;
+  const updates = {};
+  while (pos < tokens.length && !(tokens[pos].type === 'kw' && tokens[pos].value === 'WHERE')) {
+    if (tokens[pos].type === 'op' && tokens[pos].value === ',') { pos++; continue; }
+    if (tokens[pos].type === 'id' || tokens[pos].type === 'kw') {
+      const col = tokens[pos].value; pos++;
+      if (pos < tokens.length && tokens[pos].value === '=') {
+        pos++;
+        if (pos < tokens.length && (tokens[pos].type === 'string' || tokens[pos].type === 'number')) { updates[col] = tokens[pos].value; pos++; }
+        else if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'NULL') { updates[col] = null; pos++; }
+      }
+    } else pos++;
+  }
+  let whereFn = () => true;
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'WHERE') { pos++; const r = parseWhereClause(tokens, pos); whereFn = r.fn; pos = r.pos; }
+  const count = dbUpdate(tableName, whereFn, updates);
+  return { columns: [], rows: [], message: `Updated ${count} row(s) in ${tableName}.` };
+}
+
+function executeDelete(tokens) {
+  let pos = 1;
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'FROM') pos++;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table in DELETE');
+  pos++;
+  let whereFn = () => true;
+  if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'WHERE') { pos++; const r = parseWhereClause(tokens, pos); whereFn = r.fn; pos = r.pos; }
+  const count = dbDelete(tableName, whereFn);
+  return { columns: [], rows: [], message: `Deleted ${count} row(s) from ${tableName}.` };
+}
+
+function executeCreateTable(tokens) {
+  let pos = 1;
+  if (pos < tokens.length && tokens[pos].value === 'TABLE') pos++;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table name in CREATE TABLE');
+  pos++;
+  const columns = {};
+  if (pos < tokens.length && tokens[pos].value === '(') {
+    pos++;
+    while (pos < tokens.length && tokens[pos].value !== ')') {
+      if (tokens[pos].type === 'op' && tokens[pos].value === ',') { pos++; continue; }
+      if (tokens[pos].type === 'id' || tokens[pos].type === 'kw') {
+        const colName = tokens[pos].value; pos++;
+        while (pos < tokens.length && tokens[pos].value !== ',' && tokens[pos].value !== ')') pos++;
+        columns[colName] = null;
+      } else pos++;
+    }
+    if (pos < tokens.length && tokens[pos].value === ')') pos++;
+  }
+  dbCreateTable(tableName, columns);
+  return { columns: [], rows: [], message: `Created table ${tableName}.` };
+}
+
+function executeAlterTable(tokens) {
+  // ALTER TABLE tablename ...
+  let pos = 1;
+  if (pos < tokens.length && tokens[pos].value === 'TABLE') pos++;
+  const tableName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+  if (!tableName) throw new Error('No table name in ALTER TABLE');
+  const upperName = tableName.toUpperCase();
+  if (!DB.tables[upperName]) throw new Error(`Table ${tableName} not found`);
+  pos++;
+
+  const kw = pos < tokens.length && tokens[pos].type === 'kw' ? tokens[pos].value : null;
+
+  // ALTER TABLE name RENAME new_name
+  if (kw === 'RENAME') {
+    pos++;
+    if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'COLUMN') {
+      // RENAME COLUMN old TO new
+      pos++;
+      const oldCol = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+      pos++;
+      if (pos < tokens.length && tokens[pos].type === 'kw' && tokens[pos].value === 'TO') pos++;
+      const newCol = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+      pos++;
+      if (oldCol && newCol) {
+        const t = DB.tables[upperName];
+        const cols = Object.keys(t.columns);
+        const idx = cols.indexOf(oldCol);
+        if (idx >= 0) {
+          const newCols = {};
+          for (const c of cols) {
+            if (c === oldCol) newCols[newCol] = t.columns[c];
+            else newCols[c] = t.columns[c];
+          }
+          t.columns = newCols;
+          for (const r of t.rows) {
+            if (oldCol in r) { r[newCol] = r[oldCol]; delete r[oldCol]; }
+          }
+        }
+        return { columns: [], rows: [], message: `Renamed column ${oldCol} to ${newCol} in ${tableName}.` };
+      }
+      throw new Error('Invalid RENAME COLUMN syntax');
+    }
+    // RENAME table
+    const newName = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+    pos++;
+    if (newName) {
+      DB.tables[newName.toUpperCase()] = DB.tables[upperName];
+      delete DB.tables[upperName];
+      return { columns: [], rows: [], message: `Renamed table ${tableName} to ${newName}.` };
+    }
+    throw new Error('Invalid RENAME syntax');
+  }
+
+  // ALTER TABLE name ADD ...
+  if (kw === 'ADD') {
+    pos++;
+    // ADD field data_type
+    const field = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+    pos++;
+    // Skip data type tokens
+    while (pos < tokens.length && tokens[pos].type !== 'op' && !(tokens[pos].type === 'kw' && ['PRIMARY','FOREIGN','UNIQUE','CHECK','CONSTRAINT','REFERENCES'].includes(tokens[pos].value))) {
+      pos++;
+    }
+    if (field) {
+      DB.tables[upperName].columns[field] = null;
+      for (const r of DB.tables[upperName].rows) r[field] = null;
+      return { columns: [], rows: [], message: `Added column ${field} to ${tableName}.` };
+    }
+    throw new Error('Invalid ADD syntax');
+  }
+
+  // ALTER TABLE name DROP ...
+  if (kw === 'DROP') {
+    pos++;
+    const field = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+    pos++;
+    if (field) {
+      const t = DB.tables[upperName];
+      delete t.columns[field];
+      for (const r of t.rows) delete r[field];
+      return { columns: [], rows: [], message: `Dropped column ${field} from ${tableName}.` };
+    }
+    throw new Error('Invalid DROP syntax');
+  }
+
+  // ALTER TABLE name MODIFY ...
+  if (kw === 'MODIFY') {
+    pos++;
+    const field = pos < tokens.length && (tokens[pos].type === 'id' || tokens[pos].type === 'kw') ? tokens[pos].value : null;
+    pos++;
+    // Skip data type
+    while (pos < tokens.length) pos++;
+    if (field) {
+      if (field in DB.tables[upperName].columns) {
+        return { columns: [], rows: [], message: `Modified column ${field} in ${tableName} (type change simulated).` };
+      }
+      throw new Error(`Column ${field} not found in ${tableName}`);
+    }
+    throw new Error('Invalid MODIFY syntax');
+  }
+
+  throw new Error(`Unsupported ALTER TABLE operation: ${kw || 'unknown'}`);
+}
+
+/* ============================================================
+   SAMPLE DATA
+   ============================================================ */
+function seedSampleData() {
+  dbReset();
+  DB.databases = ['ICT_SQL'];
+
+  // MEMBER table
+  dbCreateTable('MEMBER', { MID: null, MNAME: null, SEX: null, LOCATION: null, AGE: null, SCORE: null, PHONE: null });
+  const members = [
+    { MID:1, MNAME:'Alice',  SEX:'F', LOCATION:'HK',  AGE:17, SCORE:86, PHONE:'5123-0001' },
+    { MID:2, MNAME:'Aaron',  SEX:'M', LOCATION:'HK',  AGE:19, SCORE:72, PHONE:null },
+    { MID:3, MNAME:'Bella',  SEX:'F', LOCATION:'KLN', AGE:16, SCORE:91, PHONE:'5123-0003' },
+    { MID:4, MNAME:'Brian',  SEX:'M', LOCATION:'NT',  AGE:18, SCORE:65, PHONE:'5123-0004' },
+    { MID:5, MNAME:'Chris',  SEX:'M', LOCATION:'KLN', AGE:20, SCORE:58, PHONE:null },
+    { MID:6, MNAME:'Cathy',  SEX:'F', LOCATION:'NT',  AGE:17, SCORE:77, PHONE:'5123-0006' },
+    { MID:7, MNAME:'Derek',  SEX:'M', LOCATION:'HK',  AGE:16, SCORE:80, PHONE:'5123-0007' },
+    { MID:8, MNAME:'Daisy',  SEX:'F', LOCATION:'KLN', AGE:19, SCORE:69, PHONE:null },
+    { MID:9, MNAME:'Ethan',  SEX:'M', LOCATION:'NT',  AGE:21, SCORE:73, PHONE:'5123-0009' },
+    { MID:10,MNAME:'Amy',    SEX:'F', LOCATION:'HK',  AGE:20, SCORE:88, PHONE:'5123-0010' },
+  ];
+  for (const r of members) dbInsert('MEMBER', r);
+
+  // ORDERS table (for FOREIGN KEY demo)
+  dbCreateTable('ORDERS', { OID: null, MID: null, ITEM: null, QTY: null, PRICE: null });
+  const orders = [
+    { OID:1, MID:1,  ITEM:'Book',    QTY:2, PRICE:50 },
+    { OID:2, MID:2,  ITEM:'Pen',     QTY:5, PRICE:10 },
+    { OID:3, MID:3,  ITEM:'Notebook',QTY:1, PRICE:30 },
+    { OID:4, MID:1,  ITEM:'Pen',     QTY:3, PRICE:10 },
+    { OID:5, MID:5,  ITEM:'Book',    QTY:1, PRICE:50 },
+    { OID:6, MID:7,  ITEM:'Ruler',   QTY:4, PRICE:5 },
+  ];
+  for (const r of orders) dbInsert('ORDERS', r);
+}
+
+/* ============================================================
+   PLAYGROUND STATEMENT DEMOS
+   ============================================================ */
+const stmtDemos = [
+  // --- 選擇 ---
+  { cat:'選擇', label:'SELECT * FROM table', desc:'列出 MEMBER 表所有記錄',
+    sql:"SELECT * FROM MEMBER;" },
+  { cat:'選擇', label:'SELECT field FROM table', desc:'只選取 MNAME, AGE, LOCATION 三個欄位',
+    sql:"SELECT MNAME, AGE, LOCATION FROM MEMBER;" },
+  { cat:'選擇', label:'SELECT ... WHERE', desc:'找出男性會員（SEX = \'M\'）',
+    sql:"SELECT MNAME, SEX, AGE FROM MEMBER\nWHERE SEX = 'M';" },
+  { cat:'選擇', label:'SELECT ... WHERE + ORDER BY', desc:'找出分數 >= 70 的會員，按分數由高到低排序',
+    sql:"SELECT MNAME, SCORE FROM MEMBER\nWHERE SCORE >= 70\nORDER BY SCORE DESC;" },
+  { cat:'選擇', label:'SELECT ... LIKE', desc:'找出名字以 A 開頭的會員',
+    sql:"SELECT MNAME FROM MEMBER\nWHERE MNAME LIKE 'A%';" },
+  { cat:'選擇', label:'SELECT ... IN', desc:'找出 LOCATION 在 HK 或 KLN 的會員',
+    sql:"SELECT MNAME, LOCATION FROM MEMBER\nWHERE LOCATION IN ('HK','KLN');" },
+  { cat:'選擇', label:'SELECT ... BETWEEN', desc:'找出 AGE 介乎 16 到 20 的會員',
+    sql:"SELECT MNAME, AGE FROM MEMBER\nWHERE AGE BETWEEN 16 AND 20;" },
+  { cat:'選擇', label:'SELECT ... IS NULL', desc:'找出 PHONE 為空值的會員',
+    sql:"SELECT MNAME, PHONE FROM MEMBER\nWHERE PHONE IS NULL;" },
+  { cat:'選擇', label:'SELECT ... GROUP BY + COUNT', desc:'按 LOCATION 分組，計算每組人數',
+    sql:"SELECT LOCATION, COUNT(*) AS CNT\nFROM MEMBER\nGROUP BY LOCATION;" },
+  { cat:'選擇', label:'SELECT ... GROUP BY + AVG', desc:'按 LOCATION 分組，計算平均分',
+    sql:"SELECT LOCATION, AVG(SCORE) AS AVG_SCORE\nFROM MEMBER\nGROUP BY LOCATION\nORDER BY AVG_SCORE DESC;" },
+  { cat:'選擇', label:'SHOW TABLES', desc:'列出所有數據表',
+    sql:"SHOW TABLES;" },
+  { cat:'選擇', label:'SHOW CREATE TABLE', desc:'顯示建立 MEMBER 表的 SQL 語句',
+    sql:"SHOW CREATE TABLE MEMBER;" },
+  { cat:'選擇', label:'USE database', desc:'切換到指定數據庫（模擬）',
+    sql:"USE ICT_SQL;" },
+
+  // --- 創建 ---
+  { cat:'創建', label:'CREATE DATABASE', desc:'創建新的數據庫（模擬）',
+    sql:"CREATE DATABASE SchoolDB;" },
+  { cat:'創建', label:'CREATE TABLE', desc:'創建新的數據表 STUDENT',
+    sql:"CREATE TABLE STUDENT (\n  SID INT,\n  SNAME VARCHAR,\n  CLASS VARCHAR\n);" },
+  { cat:'創建', label:'CREATE TABLE ... PRIMARY KEY', desc:'創建帶主鍵的數據表',
+    sql:"CREATE TABLE PRODUCT (\n  PID INT PRIMARY KEY,\n  PNAME VARCHAR,\n  PRICE DECIMAL\n);" },
+
+  // --- 插入 ---
+  { cat:'插入', label:'INSERT INTO ... VALUES', desc:'插入一筆新記錄到 MEMBER 表',
+    sql:"INSERT INTO MEMBER (MID, MNAME, SEX, LOCATION, AGE, SCORE, PHONE)\nVALUES (11, 'Frank', 'M', 'NT', 22, 95, '5123-0011');" },
+
+  // --- 更新 ---
+  { cat:'更新', label:'UPDATE ... SET', desc:'將 Aaron 的分數更新為 80',
+    sql:"UPDATE MEMBER\nSET SCORE = 80\nWHERE MNAME = 'Aaron';" },
+  { cat:'更新', label:'UPDATE ... SET (多欄位)', desc:'同時更新 LOCATION 和 PHONE',
+    sql:"UPDATE MEMBER\nSET LOCATION = 'HK', PHONE = '5123-9999'\nWHERE MNAME = 'Chris';" },
+
+  // --- 刪除 ---
+  { cat:'刪除', label:'DELETE FROM ... WHERE', desc:'刪除分數低於 60 的記錄',
+    sql:"DELETE FROM MEMBER\nWHERE SCORE < 60;" },
+  { cat:'刪除', label:'DROP TABLE', desc:'刪除整個 STUDENT 表（如已創建）',
+    sql:"DROP TABLE STUDENT;" },
+  { cat:'刪除', label:'DROP DATABASE', desc:'刪除數據庫（模擬）',
+    sql:"DROP DATABASE SchoolDB;" },
+
+  // --- 修改 (ALTER TABLE) ---
+  { cat:'修改', label:'ALTER TABLE ... RENAME', desc:'將 STUDENT 表重新命名為 STUDENTS（需先創建 STUDENT）',
+    sql:"-- 先創建再改名\nCREATE TABLE STUDENT (SID INT, SNAME VARCHAR);\nALTER TABLE STUDENT RENAME STUDENTS;" },
+  { cat:'修改', label:'ALTER TABLE ... RENAME COLUMN', desc:'將 ORDERS 表的 ITEM 欄位改名為 PRODUCT',
+    sql:"ALTER TABLE ORDERS RENAME COLUMN ITEM TO PRODUCT;" },
+  { cat:'修改', label:'ALTER TABLE ... ADD', desc:'在 MEMBER 表加入 EMAIL 欄位',
+    sql:"ALTER TABLE MEMBER ADD EMAIL VARCHAR;" },
+  { cat:'修改', label:'ALTER TABLE ... DROP', desc:'從 MEMBER 表刪除 PHONE 欄位',
+    sql:"ALTER TABLE MEMBER DROP PHONE;" },
+  { cat:'修改', label:'ALTER TABLE ... MODIFY', desc:'修改欄位類型（模擬）',
+    sql:"ALTER TABLE MEMBER MODIFY AGE INT;" },
+];
+
+/* ============================================================
+   UI LOGIC
+   ============================================================ */
 const flashcards = [
-  { k: "AND", q: "何時回傳 TRUE？", a: "所有條件都為 TRUE 才為 TRUE；任何一個為 FALSE 就是 FALSE。" },
-  { k: "OR", q: "何時回傳 TRUE？", a: "只要至少一個條件為 TRUE 就為 TRUE；全部 FALSE 才 FALSE。" },
-  { k: "NOT", q: "做什麼？", a: "將條件真假反轉，例如 NOT (AGE > 18) 等同 AGE <= 18。" },
-  { k: "IN", q: "用法？", a: "檢查值是否在集合中：WHERE LOCATION IN ('HK','KLN')." },
-  { k: "BETWEEN ... AND", q: "用法？", a: "範圍（通常包含端點）：WHERE AGE BETWEEN 18 AND 25." },
-  { k: "LIKE", q: "用法？", a: "字串模式比對：WHERE MNAME LIKE 'A%'.  % 任意長度、_ 一個字元。" },
-  { k: "IS NULL", q: "何時用？", a: "NULL 不能用 = 比較；要用 IS NULL 判斷空值。" },
-  { k: "IS NOT NULL", q: "何時用？", a: "找出非空值：WHERE PHONE IS NOT NULL." },
-  { k: "ABS(n)", q: "做什麼？", a: "回傳絕對值，例如 ABS(-7)=7。" },
-  { k: "INT(n)", q: "做什麼？", a: "向下取整（取整數部分），常見於數學處理。" },
-  { k: "LOWER(s)", q: "做什麼？", a: "把字串轉小寫；常用於大小寫不敏感比較前的標準化。" },
-  { k: "UPPER(s)", q: "做什麼？", a: "把字串轉大寫；同上，用於比較或輸出格式。" },
-  { k: "TRIM(s)", q: "做什麼？", a: "移除字串首尾空白；清理輸入資料很常用。" },
-  { k: "MID(s,pos,len)", q: "做什麼？", a: "由指定位置截取指定長度字串；不少系統把 MID 視為 SUBSTRING 的同義用法。" },
-  { k: "COUNT(*)", q: "做什麼？", a: "計算筆數；配合 GROUP BY 可計每組數量。" },
-  { k: "SUM(col)", q: "做什麼？", a: "加總數值欄位；通常搭配 GROUP BY 做分組總和。" },
-  { k: "AVG(col)", q: "做什麼？", a: "計算平均值；分組平均是常考題型。" },
-  { k: "MIN(col) / MAX(col)", q: "做什麼？", a: "找最小/最大值；可用於分組後找每組極值。" },
-  { k: "GROUP BY", q: "做什麼？", a: "把列按欄位分組，再用聚合函數做匯總（如 COUNT/AVG）。" },
-  { k: "ORDER BY", q: "做什麼？", a: "排序結果，可指定 ASC/DESC，例如 ORDER BY AGE DESC。" }
+  { k:"AND", q:"何時回傳 TRUE？", a:"所有條件都為 TRUE 才為 TRUE；任何一個為 FALSE 就是 FALSE。" },
+  { k:"OR", q:"何時回傳 TRUE？", a:"只要至少一個條件為 TRUE 就為 TRUE；全部 FALSE 才 FALSE。" },
+  { k:"NOT", q:"做什麼？", a:"將條件真假反轉，例如 NOT (AGE > 18) 等同 AGE <= 18。" },
+  { k:"IN", q:"用法？", a:"檢查值是否在集合中：WHERE LOCATION IN ('HK','KLN')." },
+  { k:"BETWEEN ... AND", q:"用法？", a:"範圍（通常包含端點）：WHERE AGE BETWEEN 18 AND 25." },
+  { k:"LIKE", q:"用法？", a:"字串模式比對：WHERE MNAME LIKE 'A%'.  % 任意長度、_ 一個字元。" },
+  { k:"IS NULL", q:"何時用？", a:"NULL 不能用 = 比較；要用 IS NULL 判斷空值。" },
+  { k:"IS NOT NULL", q:"何時用？", a:"找出非空值：WHERE PHONE IS NOT NULL." },
+  { k:"ABS(n)", q:"做什麼？", a:"回傳絕對值，例如 ABS(-7)=7。" },
+  { k:"INT(n)", q:"做什麼？", a:"向下取整（取整數部分），常見於數學處理。" },
+  { k:"LOWER(s)", q:"做什麼？", a:"把字串轉小寫；常用於大小寫不敏感比較前的標準化。" },
+  { k:"UPPER(s)", q:"做什麼？", a:"把字串轉大寫；同上，用於比較或輸出格式。" },
+  { k:"TRIM(s)", q:"做什麼？", a:"移除字串首尾空白；清理輸入資料很常用。" },
+  { k:"MID(s,pos,len)", q:"做什麼？", a:"由指定位置截取指定長度字串；不少系統把 MID 視為 SUBSTRING 的同義用法。" },
+  { k:"COUNT(*)", q:"做什麼？", a:"計算筆數；配合 GROUP BY 可計每組數量。" },
+  { k:"SUM(col)", q:"做什麼？", a:"加總數值欄位；通常搭配 GROUP BY 做分組總和。" },
+  { k:"AVG(col)", q:"做什麼？", a:"計算平均值；分組平均是常考題型。" },
+  { k:"MIN(col) / MAX(col)", q:"做什麼？", a:"找最小/最大值；可用於分組後找每組極值。" },
+  { k:"GROUP BY", q:"做什麼？", a:"把列按欄位分組，再用聚合函數做匯總（如 COUNT/AVG）。" },
+  { k:"ORDER BY", q:"做什麼？", a:"排序結果，可指定 ASC/DESC，例如 ORDER BY AGE DESC。" },
+  { k:"SELECT * FROM table", q:"做什麼？", a:"列出所有記錄。最常見的查詢語句。" },
+  { k:"SHOW TABLES", q:"做什麼？", a:"列出當前數據庫中的所有數據表。" },
+  { k:"SHOW CREATE TABLE", q:"做什麼？", a:"顯示建立指定數據表的完整 SQL 語句。" },
+  { k:"USE database", q:"做什麼？", a:"切換到指定的數據庫進行操作。" },
+  { k:"CREATE DATABASE", q:"做什麼？", a:"創建一個新的數據庫。" },
+  { k:"CREATE TABLE", q:"做什麼？", a:"創建一個新的數據表，可定義欄位與約束。" },
+  { k:"DROP TABLE", q:"做什麼？", a:"刪除整個數據表及其所有數據。" },
+  { k:"DROP DATABASE", q:"做什麼？", a:"刪除整個數據庫。" },
+  { k:"INSERT INTO ... VALUES", q:"做什麼？", a:"將新記錄插入到數據表中。" },
+  { k:"UPDATE ... SET", q:"做什麼？", a:"更新數據表中現有記錄的欄位值。" },
+  { k:"DELETE FROM", q:"做什麼？", a:"從數據表中刪除符合條件的記錄。" },
+  { k:"ALTER TABLE ADD", q:"做什麼？", a:"在現有數據表中添加新欄位。" },
+  { k:"ALTER TABLE DROP", q:"做什麼？", a:"在現有數據表中刪除欄位。" },
+  { k:"ALTER TABLE MODIFY", q:"做什麼？", a:"修改現有欄位的數據類型。" },
+  { k:"ALTER TABLE RENAME", q:"做什麼？", a:"重新命名數據表或欄位。" },
+  { k:"PRIMARY KEY", q:"做什麼？", a:"唯一標識每條記錄的主鍵，不能為 NULL，每個表只能有一個。" },
+  { k:"FOREIGN KEY", q:"做什麼？", a:"建立表與表之間的關聯，確保引用完整性（REFERENCES 父表）。" },
+  { k:"NOT NULL", q:"做什麼？", a:"強制欄位必須有值，不能為 NULL。" },
+  { k:"UNIQUE", q:"做什麼？", a:"確保欄位中所有值都不重複。" },
+  { k:"DEFAULT", q:"做什麼？", a:"為欄位設定預設值，當插入時未指定值則使用此值。" },
+  { k:"CHECK", q:"做什麼？", a:"設定條件約束，確保欄位值符合特定規則（如 AGE >= 0）。" },
 ];
 
 const quiz = [
-  {
-    stem: "想找 MNAME 以 'A' 開頭的會員，WHERE 子句應該怎寫？",
-    choices: [
-      "WHERE MNAME LIKE 'A%'",
-      "WHERE MNAME LIKE A%",
-      "WHERE MNAME = 'A%'",
-      "WHERE MNAME IN 'A%'"
-    ],
-    correct: 0,
-    explain: "LIKE 用於模式比對；字串要加單引號，% 代表任意長度。"
-  },
-  {
-    stem: "要找 AGE 介乎 18 至 25（含端點），應用哪個寫法？",
-    choices: [
-      "WHERE AGE IN (18,25)",
-      "WHERE AGE BETWEEN 18 AND 25",
-      "WHERE AGE > 18 AND < 25",
-      "WHERE AGE BETWEEN 25 AND 18"
-    ],
-    correct: 1,
-    explain: "BETWEEN 18 AND 25 是最常見範圍寫法，考試也偏好這種。"
-  },
-  {
-    stem: "要找 PHONE 欄位為空值（NULL）的記錄，正確是？",
-    choices: [
-      "WHERE PHONE = NULL",
-      "WHERE PHONE == NULL",
-      "WHERE PHONE IS NULL",
-      "WHERE PHONE LIKE NULL"
-    ],
-    correct: 2,
-    explain: "NULL 不用 = 比較，應用 IS NULL / IS NOT NULL。"
-  },
-  {
-    stem: "分組計算每個 LOCATION 的平均分數，應用哪個骨架？",
-    choices: [
-      "SELECT LOCATION, AVG(SCORE) FROM MEMBER GROUP BY LOCATION",
-      "SELECT LOCATION, AVG(SCORE) FROM MEMBER ORDER BY LOCATION",
-      "SELECT LOCATION, SCORE FROM MEMBER GROUP BY LOCATION",
-      "SELECT AVG(LOCATION), SCORE FROM MEMBER GROUP BY SCORE"
-    ],
-    correct: 0,
-    explain: "GROUP BY LOCATION，並在 SELECT 中對 SCORE 使用 AVG。"
-  },
-  {
-    stem: "想按 AGE 由大到小排序，應該？",
-    choices: [
-      "GROUP BY AGE DESC",
-      "ORDER BY AGE DESC",
-      "ORDER BY DESC AGE",
-      "SORT BY AGE DESC"
-    ],
-    correct: 1,
-    explain: "排序用 ORDER BY；DESC 表示由大到小。"
-  }
+  { stem:"想找 MNAME 以 'A' 開頭的會員，WHERE 子句應該怎寫？", choices:["WHERE MNAME LIKE 'A%'", "WHERE MNAME LIKE A%", "WHERE MNAME = 'A%'", "WHERE MNAME IN 'A%'"], correct:0, explain:"LIKE 用於模式比對；字串要加單引號，% 代表任意長度。" },
+  { stem:"要找 AGE 介乎 18 至 25（含端點），應用哪個寫法？", choices:["WHERE AGE IN (18,25)", "WHERE AGE BETWEEN 18 AND 25", "WHERE AGE > 18 AND < 25", "WHERE AGE BETWEEN 25 AND 18"], correct:1, explain:"BETWEEN 18 AND 25 是最常見範圍寫法，考試也偏好這種。" },
+  { stem:"要找 PHONE 欄位為空值（NULL）的記錄，正確是？", choices:["WHERE PHONE = NULL", "WHERE PHONE == NULL", "WHERE PHONE IS NULL", "WHERE PHONE LIKE NULL"], correct:2, explain:"NULL 不用 = 比較，應用 IS NULL / IS NOT NULL。" },
+  { stem:"分組計算每個 LOCATION 的平均分數，應用哪個骨架？", choices:["SELECT LOCATION, AVG(SCORE) FROM MEMBER GROUP BY LOCATION", "SELECT LOCATION, AVG(SCORE) FROM MEMBER ORDER BY LOCATION", "SELECT LOCATION, SCORE FROM MEMBER GROUP BY LOCATION", "SELECT AVG(LOCATION), SCORE FROM MEMBER GROUP BY SCORE"], correct:0, explain:"GROUP BY LOCATION，並在 SELECT 中對 SCORE 使用 AVG。" },
+  { stem:"想按 AGE 由大到小排序，應該？", choices:["GROUP BY AGE DESC", "ORDER BY AGE DESC", "ORDER BY DESC AGE", "SORT BY AGE DESC"], correct:1, explain:"排序用 ORDER BY；DESC 表示由大到小。" },
+  { stem:"以下哪個約束用來確保欄位值不重複？", choices:["PRIMARY KEY", "UNIQUE", "CHECK", "DEFAULT"], correct:1, explain:"UNIQUE 約束確保欄位中所有值都不重複（PRIMARY KEY 也有此特性，但主要用途是唯一識別）。" },
+  { stem:"要刪除整個數據表，應用哪個語句？", choices:["DELETE TABLE", "DROP TABLE", "REMOVE TABLE", "ALTER TABLE DROP"], correct:1, explain:"DROP TABLE 用於刪除整個數據表結構及數據。" },
 ];
 
-function renderFlashcards(){
+function escapeHtml(s) {
+  return String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+
+/* Flashcards */
+function renderFlashcards() {
   const grid = document.getElementById("flashGrid");
   grid.innerHTML = "";
   flashcards.forEach((c) => {
     const el = document.createElement("div");
     el.className = "flash";
-    el.innerHTML = `<div class="k">${escapeHtml(c.k)}</div>
-                    <div class="q">${escapeHtml(c.q)}</div>
-                    <div class="a">${escapeHtml(c.a)}</div>`;
+    el.innerHTML = `<div class="k">${escapeHtml(c.k)}</div><div class="q">${escapeHtml(c.q)}</div><div class="a">${escapeHtml(c.a)}</div>`;
     el.addEventListener("click", ()=> { el.classList.toggle("reveal"); updateFlashProgress(); });
     grid.appendChild(el);
   });
 }
+function updateFlashProgress() {
+  const total = document.querySelectorAll(".flash").length;
+  const revealed = document.querySelectorAll(".flash.reveal").length;
+  const el = document.getElementById("flashProgress");
+  if (el) el.textContent = `已翻開：${revealed} / ${total}`;
+  const toggle = document.getElementById("toggleAllFlash");
+  if (toggle) toggle.textContent = (revealed === total && total > 0) ? "全部收起" : "全部翻開";
+}
+function wireFlashControls() {
+  const toggleAll = document.getElementById("toggleAllFlash");
+  if (toggleAll) {
+    toggleAll.addEventListener("click", ()=> {
+      const cards = Array.from(document.querySelectorAll(".flash"));
+      const total = cards.length;
+      const revealed = cards.filter(c => c.classList.contains("reveal")).length;
+      const makeReveal = !(revealed === total && total > 0);
+      cards.forEach(c => c.classList.toggle("reveal", makeReveal));
+      updateFlashProgress();
+    });
+  }
+  const randomBtn = document.getElementById("randomFlash");
+  if (randomBtn) {
+    randomBtn.addEventListener("click", ()=> {
+      const cards = Array.from(document.querySelectorAll(".flash"));
+      if (cards.length === 0) return;
+      const idx = Math.floor(Math.random() * cards.length);
+      cards[idx].classList.add("reveal");
+      cards[idx].scrollIntoView({ behavior:"smooth", block:"center" });
+      updateFlashProgress();
+    });
+  }
+}
 
-function renderQuiz(){
+/* Quiz */
+function renderQuiz() {
   const list = document.getElementById("quizList");
   list.innerHTML = "";
   quiz.forEach((q, idx) => {
     const item = document.createElement("div");
     item.className = "quizItem";
     item.dataset.idx = idx;
-    item.innerHTML = `
-      <p class="stem"><b>Q${idx+1}.</b> ${escapeHtml(q.stem)}</p>
-      <div class="choices"></div>
-      <div class="explain">解釋：${escapeHtml(q.explain)}</div>
-    `;
+    item.innerHTML = `<p class="stem"><b>Q${idx+1}.</b> ${escapeHtml(q.stem)}</p><div class="choices"></div><div class="explain">解釋：${escapeHtml(q.explain)}</div>`;
     const choicesWrap = item.querySelector(".choices");
     q.choices.forEach((txt, cidx) => {
       const ch = document.createElement("button");
-      ch.className = "choice";
-      ch.type = "button";
-      ch.textContent = txt;
+      ch.className = "choice"; ch.type = "button"; ch.textContent = txt;
       ch.addEventListener("click", ()=> gradeChoice(item, cidx));
       choicesWrap.appendChild(ch);
     });
@@ -406,48 +1114,33 @@ function renderQuiz(){
   });
   updateScore();
 }
-
-function gradeChoice(item, chosen){
-  if(item.classList.contains("done")) return;
+function gradeChoice(item, chosen) {
+  if (item.classList.contains("done")) return;
   const idx = Number(item.dataset.idx);
   const q = quiz[idx];
   const btns = Array.from(item.querySelectorAll(".choice"));
   btns.forEach((b, i) => {
-    if(i === q.correct) b.classList.add("correct");
-    if(i === chosen && i !== q.correct) b.classList.add("wrong");
+    if (i === q.correct) b.classList.add("correct");
+    if (i === chosen && i !== q.correct) b.classList.add("wrong");
     b.disabled = true;
   });
   item.classList.add("done");
   item.dataset.correct = (chosen === q.correct) ? "1" : "0";
   updateScore();
 }
-
-function updateScore(){
+function updateScore() {
   const items = Array.from(document.querySelectorAll(".quizItem"));
   const done = items.filter(i => i.classList.contains("done"));
-  const score = done.reduce((s,i)=> s + (i.dataset.correct==="1"?1:0), 0);
+  const score = done.reduce((s, i) => s + (i.dataset.correct === "1" ? 1 : 0), 0);
   document.getElementById("quizScore").textContent = `得分：${score} / ${quiz.length}`;
 }
+function resetQuiz() { renderQuiz(); }
 
-function resetQuiz(){
-  renderQuiz();
-}
-
-function escapeHtml(s){
-  return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-/* =========================
-   TABS
-   ========================= */
+/* Tabs */
 const tabs = document.querySelectorAll(".tab");
 const views = {
   flash: document.getElementById("view-flash"),
+  reference: document.getElementById("view-reference"),
   quiz: document.getElementById("view-quiz"),
   playground: document.getElementById("view-playground")
 };
@@ -455,210 +1148,99 @@ tabs.forEach(t => t.addEventListener("click", () => {
   tabs.forEach(x => x.classList.remove("active"));
   t.classList.add("active");
   const v = t.dataset.view;
-  Object.keys(views).forEach(k => views[k].style.display = (k===v) ? "" : "none");
+  Object.keys(views).forEach(k => views[k].style.display = (k === v) ? "" : "none");
 }));
 
-function updateFlashProgress(){
-  const total = document.querySelectorAll(".flash").length;
-  const revealed = document.querySelectorAll(".flash.reveal").length;
-  const el = document.getElementById("flashProgress");
-  if(el) el.textContent = `已翻開：${revealed} / ${total}`;
-
-  const toggle = document.getElementById("toggleAllFlash");
-  if(toggle) toggle.textContent = (revealed === total && total>0) ? "全部收起" : "全部翻開";
-}
-
-function wireFlashControls(){
-  const toggleAll = document.getElementById("toggleAllFlash");
-  if(toggleAll){
-    toggleAll.addEventListener("click", ()=>{
-      const cards = Array.from(document.querySelectorAll(".flash"));
-      const total = cards.length;
-      const revealed = cards.filter(c=>c.classList.contains("reveal")).length;
-      const makeReveal = !(revealed === total && total>0);
-      cards.forEach(c=> c.classList.toggle("reveal", makeReveal));
-      updateFlashProgress();
-    });
-  }
-
-  const randomBtn = document.getElementById("randomFlash");
-  if(randomBtn){
-    randomBtn.addEventListener("click", ()=>{
-      const cards = Array.from(document.querySelectorAll(".flash"));
-      if(cards.length===0) return;
-      const idx = Math.floor(Math.random()*cards.length);
-      cards[idx].classList.add("reveal");
-      cards[idx].scrollIntoView({behavior:"smooth", block:"center"});
-      updateFlashProgress();
-    });
-  }
-}
-
-/* =========================
-   SQL PLAYGROUND (本地純 JS asm 版)
-   ========================= */
-let SQL = null;
-let db = null;
-
-const dbStatus = document.getElementById("dbStatus");
+/* Playground */
 const runMsg = document.getElementById("runMsg");
 const resultTable = document.getElementById("resultTable");
 const tablePreview = document.getElementById("tablePreview");
 const sqlInput = document.getElementById("sqlInput");
+const stmtDesc = document.getElementById("stmtDesc");
 
-const examples = {
-  ex1: `-- 題目1：找出所有男性會員，按年齡由大到小排序
-SELECT MNAME, SEX, AGE, LOCATION
-FROM MEMBER
-WHERE SEX = 'M'
-ORDER BY AGE DESC;`,
-  ex2: `-- 題目2：名字以 A 開頭，且分數 >= 70；按分數由高到低
-SELECT MNAME, SCORE, LOCATION
-FROM MEMBER
-WHERE MNAME LIKE 'A%' AND SCORE >= 70
-ORDER BY SCORE DESC;`,
-  ex3: `-- 題目3：LOCATION 在 HK/KLN，AGE 介乎 16-20；按年齡由小到大
-SELECT MNAME, AGE, LOCATION
-FROM MEMBER
-WHERE LOCATION IN ('HK','KLN') AND AGE BETWEEN 16 AND 20
-ORDER BY AGE ASC;`,
-  ex4: `-- 題目4：按地區分組，計算每組筆數及平均分；按平均分由高到低
-SELECT LOCATION, COUNT(*) AS CNT, AVG(SCORE) AS AVG_SCORE
-FROM MEMBER
-GROUP BY LOCATION
-ORDER BY AVG_SCORE DESC;`
-};
-
-function setMsg(type, html){
-  runMsg.className = "";
-  runMsg.innerHTML = "";
+function setMsg(type, html) {
+  runMsg.className = ""; runMsg.innerHTML = "";
   const div = document.createElement("div");
-  div.className = type;
-  div.innerHTML = html;
+  div.className = type; div.innerHTML = html;
   runMsg.appendChild(div);
 }
 
-function renderTable(container, columns, rows){
-  if(!columns || !rows){ container.innerHTML = ""; return; }
-  const thead = `<thead><tr>${columns.map(c=>`<th>${escapeHtml(c)}</th>`).join("")}</tr></thead>`;
-  const tbody = `<tbody>${
-    rows.map(r => `<tr>${r.map(v => `<td>${escapeHtml(v===null?"NULL":v)}</td>`).join("")}</tr>`).join("")
-  }</tbody>`;
+function renderTable(container, columns, rows) {
+  if (!columns || !rows) { container.innerHTML = ""; return; }
+  const thead = `<thead><tr>${columns.map(c => `<th>${escapeHtml(c)}</th>`).join("")}</tr></thead>`;
+  const tbody = `<tbody>${rows.map(r => `<tr>${columns.map(c => `<td>${escapeHtml(r[c] == null ? "NULL" : r[c])}</td>`).join("")}</tr>`).join("")}</tbody>`;
   container.innerHTML = `<table>${thead}${tbody}</table>`;
 }
 
-async function initDb(){
-  resultTable.innerHTML = "";
-  tablePreview.innerHTML = "";
-  setMsg("notice", "正在載入本地 SQL 引擎...");
-  dbStatus.textContent = "DB：載入中";
-  try{
-    // 呼叫純 JS 版本的初始化，不需設定 locateFile 以及 wasm 檔案
-    SQL = await initSqlJs();
-    db = new SQL.Database();
-    seedDb(db);
-    dbStatus.textContent = "DB：已就緒";
-    setMsg("ok", "已建立 MEMBER 資料表（在瀏覽器記憶體內）。可開始 Run。");
-    showAll();
-  }catch(e){
-    dbStatus.textContent = "DB：載入失敗";
-    setMsg("err", `載入失敗：${escapeHtml(e.message || String(e))}<br><br><b>🚨 解決方式：</b><br>請確認你已經下載了 <code>sql-asm.min.js</code>，並把它跟這份 HTML 放在「同一個資料夾裡面」。`);
+function showTable(tableName) {
+  try {
+    const out = parseAndExecute(`SELECT * FROM ${tableName} ORDER BY 1`);
+    renderTable(tablePreview, out.columns, out.rows);
+  } catch(e) {
+    setMsg("err", escapeHtml(e.message));
   }
 }
 
-function seedDb(db){
-  // SAMPLE DATA
-  db.run(`DROP TABLE IF EXISTS MEMBER;`);
-  db.run(`
-    CREATE TABLE MEMBER(
-      MID INTEGER PRIMARY KEY,
-      MNAME TEXT,
-      SEX TEXT,
-      LOCATION TEXT,
-      AGE INTEGER,
-      SCORE INTEGER,
-      PHONE TEXT
-    );
-  `);
-
-  const stmt = db.prepare("INSERT INTO MEMBER (MID, MNAME, SEX, LOCATION, AGE, SCORE, PHONE) VALUES (?,?,?,?,?,?,?);");
-  const rows = [
-    [1, "Alice", "F", "HK", 17, 86, "5123-0001"],
-    [2, "Aaron", "M", "HK", 19, 72, null],
-    [3, "Bella", "F", "KLN", 16, 91, "5123-0003"],
-    [4, "Brian", "M", "NT", 18, 65, "5123-0004"],
-    [5, "Chris", "M", "KLN", 20, 58, null],
-    [6, "Cathy", "F", "NT", 17, 77, "5123-0006"],
-    [7, "Derek", "M", "HK", 16, 80, "5123-0007"],
-    [8, "Daisy", "F", "KLN", 19, 69, null],
-    [9, "Ethan", "M", "NT", 21, 73, "5123-0009"],
-    [10, "Amy", "F", "HK", 20, 88, "5123-0010"]
-  ];
-  db.run("BEGIN TRANSACTION;");
-  for(const r of rows){ stmt.run(r); }
-  db.run("COMMIT;");
-  stmt.free();
-}
-
-function execSql(sql){
-  const res = db.exec(sql);
-  if(!res || res.length === 0){
-    return { columns: [], rows: [], message: "已執行（無輸出表格）。如是 SELECT 以外語句屬正常。" };
-  }
-  const first = res[0];
-  return { columns: first.columns, rows: first.values, message: "已執行並輸出結果。" };
-}
-
-function showAll(){
-  if(!db) return;
-  const out = execSql("SELECT * FROM MEMBER ORDER BY MID;");
-  renderTable(tablePreview, out.columns, out.rows);
-}
-
-function runCurrent(){
-  if(!db){
-    setMsg("err", "資料庫未就緒。請確認已經將 sql-asm.min.js 下載放於同資料夾中。");
-    return;
-  }
+function runCurrent() {
   const sql = sqlInput.value.trim();
-  if(!sql){
-    setMsg("notice", "請先輸入 SQL。可按上方任一題目以顯示要求。");
-    return;
-  }
-  try{
-    const out = execSql(sql);
-    renderTable(resultTable, out.columns, out.rows);
-    setMsg("ok", out.message);
-  }catch(e){
-    setMsg("err", `SQL 錯誤：${escapeHtml(e.message || String(e))}`);
+  if (!sql) { setMsg("notice", "請先輸入 SQL。可點擊左側任一語句以載入示範。"); return; }
+  try {
+    const out = parseAndExecute(sql);
+    if (out.columns.length > 0) renderTable(resultTable, out.columns, out.rows);
+    else resultTable.innerHTML = "";
+    setMsg("ok", escapeHtml(out.message));
+  } catch(e) {
+    setMsg("err", `SQL 錯誤：${escapeHtml(e.message)}`);
   }
 }
 
-/* Wire buttons */
-document.querySelectorAll("[data-example]").forEach(btn => {
-  btn.addEventListener("click", ()=>{
-    const key = btn.dataset.example;
-    sqlInput.value = examples[key];
-    const task = btn.dataset.task || "";
-    const taskBox = document.getElementById("taskBox");
-    if(taskBox) taskBox.textContent = task || "按上方任一題目以顯示要求。";
-    sqlInput.focus();
+/* Build statement list */
+function buildStmtList() {
+  const list = document.getElementById("stmtList");
+  list.innerHTML = "";
+  let currentCat = '';
+  stmtDemos.forEach((s, idx) => {
+    if (s.cat !== currentCat) {
+      currentCat = s.cat;
+      const catEl = document.createElement("div");
+      catEl.className = "stmtCat";
+      catEl.textContent = currentCat;
+      list.appendChild(catEl);
+    }
+    const btn = document.createElement("button");
+    btn.className = "stmtBtn";
+    btn.type = "button";
+    btn.textContent = s.label;
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".stmtBtn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      sqlInput.value = s.sql;
+      stmtDesc.textContent = s.desc;
+      sqlInput.focus();
+    });
+    list.appendChild(btn);
   });
-});
+}
+
 document.getElementById("runBtn").addEventListener("click", runCurrent);
-document.getElementById("resetDbBtn").addEventListener("click", initDb);
-document.getElementById("showAllBtn").addEventListener("click", showAll);
+document.getElementById("resetDbBtn").addEventListener("click", ()=> { seedSampleData(); resultTable.innerHTML = ""; setMsg("ok", "資料庫已重設。"); showTable('MEMBER'); });
+document.getElementById("showAllBtn").addEventListener("click", ()=> showTable('MEMBER'));
+document.getElementById("showOrdersBtn").addEventListener("click", ()=> showTable('ORDERS'));
 document.getElementById("resetQuiz").addEventListener("click", resetQuiz);
 
-/* Initial render */
+/* Init */
 renderFlashcards();
 wireFlashControls();
 updateFlashProgress();
 renderQuiz();
-sqlInput.value = examples.ex1;
-const taskBox = document.getElementById("taskBox");
-if(taskBox) taskBox.textContent = document.querySelector('[data-example="ex1"]').dataset.task;
-initDb();
+seedSampleData();
+buildStmtList();
+// Load first demo by default
+if (stmtDemos.length > 0) {
+  sqlInput.value = stmtDemos[0].sql;
+  stmtDesc.textContent = stmtDemos[0].desc;
+}
+showTable('MEMBER');
 </script>
 </body>
 </html>
